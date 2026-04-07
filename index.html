@@ -922,31 +922,16 @@
 		}
 		scoreText.setText(score);
 
-		if(score === planetInfo.count.row*planetInfo.count.col*10) {
-			if (playingAddition) {
-				playingAddition = false;
-				addQuizText.visible = false;
-			}
-			else if (playingSubstraction) {
-				playingSubstraction = false;
-				subQuizText.visible = false;
-			}
-			else if (playingMultiplication) {
-				playingMultiplication = false;
-				multiQuizText.visible = false;
-			}
-			else if (playingDivision) {
-				playingDivision = false;
-				divQuizText.visible = false;
-			}
+		if(score === planetInfo.count.row * planetInfo.count.col * 10) {
 
 			game.time.events.remove(timerEvents);
-			successAudio.mute = true;
-			lostAudio.mute = true;
-			backgroundAudio.stop();
+
 			gainAudio.play();
 
-			showWinScreen();
+			level++; //  passage niveau suivant
+
+			game.time.events.add(Phaser.Timer.SECOND * 2, nextLevel, this);
+
 			return;
 		}
 		
@@ -996,11 +981,52 @@
   
 		}
 		rocket.angle=0;
-		
-		
+	}
+
+	function nextLevel() {
+
+		// reset partiel
+		score = 0;
+		Time = 0;
+		lives = 3;
+
+		scoreText.setText(score);
+		text.setText(Time + 's');
+
+		heart1.visible = true;
+		heart2.visible = true;
+		heart3.visible = true;
+
+		// nettoyer anciens nombres
+		if (numbers) numbers.destroy();
+
+		// relancer le bon mode
+		if (playingAddition) {
+			initAddNumbers();
+			addQuizText.visible = true;
+		}
+		else if (playingSubstraction) {
+			initSubNumbers();
+			subQuizText.visible = true;
+		}
+		else if (playingMultiplication) {
+			initMultiNumbers();
+			multiQuizText.visible = true;
+		}
+		else if (playingDivision) {
+			initDivNumbers();
+			divQuizText.visible = true;
+		}
+
+		rocket.reset(game.world.width * 0.5, game.world.height - 20);
+
+		var speed = -80 - (level * 10);
+		asteroid1.body.velocity.set(speed, speed);
+
+		timerEvents = game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 	}
 	
-		function rocketLeaveScreen() {
+	function rocketLeaveScreen() {
 		lives--;
 		if(lives) {
 			if(lives==2){
@@ -1119,7 +1145,7 @@
 		var dance = floss.animations.add('dance');
 		floss.animations.play('dance', 5, true);
 
-		var replayBtn = game.add.button(game.world.centerX - 60, 285, 'winButton', restartGame, this);
+		var replayBtn = game.add.button(game.world.centerX - 60, 285, 'winButton', nextLevel, this);
 		replayBtn.anchor.set(0.5);
 		replayBtn.scale.setTo(0.85, 0.85);
 
@@ -1179,14 +1205,39 @@
 
 		var homeBtn = game.add.button(game.world.centerX, 280, 'homeButton', goHome, this);
 		homeBtn.anchor.set(0.5);
+
+		levelText.setText('Level: ' + level + ' - Try again');
 	}
 
 	function restartGame() {
-		location.reload();
+
+		game.time.events.remove(timerEvents);
+
+		score = 0;
+		Time = 0;
+		lives = 3;
+
+		game.world.removeAll();
+		create();
+
+		if (playingAddition) {
+			startAddition();
+		}
+		else if (playingSubstraction) {
+			startSubstraction();
+		}
+		else if (playingMultiplication) {
+			startMultiplication();
+		}
+		else if (playingDivision) {
+			startDivision();
+		}
 	}
 
 	function goHome() {
-		location.reload();
+		game.world.removeAll();
+		create();
+		showMenu();
 	}
 	
 	function startAddition() {
