@@ -129,11 +129,14 @@
 	var homeMenuButton;
 
 	var level = 1;
-	var levelText = game.add.text(game.world.centerX, 8, 'Level: 1', textStyle);
+
 
 	textStyle = { font: 'bold 18px Arial', fill: '#F39C12' };
 	textStyle1 = { font: 'bold 30px Arial', fill: '#8A2B56' };
 	var numberStyle= { font: 'bold 15px Arial', fill: '#F0F3F4' };
+
+	var levelText = game.add.text(game.world.centerX, 8, 'Level: 1', textStyle);
+
 	function preload() {
 		game.load.audio('backgroundAudio', 'start1.mp3');
 		game.load.audio('startAudio', 'start.wav');
