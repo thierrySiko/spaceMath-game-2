@@ -366,23 +366,23 @@
 		divButton.anchor.set(0.5);
 		divButton.visible=false;
 		
-		homeButton = game.add.button(20, game.world.height-90, 'homeButton', homeButton, this);
+		homeButton = game.add.button(20, game.world.height-90, 'homeButton', onHomeButton, this);
 		homeButton.anchor.set(0.5);
 		homeButton.visible=false;
 		
-		pauseButton = game.add.button(20, game.world.height-50, 'pauseButton', pauseButton, this);
+		pauseButton = game.add.button(20, game.world.height-50, 'pauseButton', onPauseButton, this);
 		pauseButton.anchor.set(0.5);
 		pauseButton.visible=false;
 		
-		playButton = game.add.button(20, game.world.height-50, 'playButton', playButton, this);
+		playButton = game.add.button(20, game.world.height-50, 'playButton', onPlayButton, this);
 		playButton.anchor.set(0.5);
 		playButton.visible=false;
 		
-		soundOffButton = game.add.button(20, game.world.height-125, 'soundOffButton', soundOffButton, this);
+		soundOffButton = game.add.button(20, game.world.height-125, 'soundOffButton', onSoundOffButton, this);
 		soundOffButton.anchor.set(0.5);
 		soundOffButton.visible=false;
 		
-		soundOnButton = game.add.button(20, game.world.height-125, 'soundOnButton', soundOnButton, this);
+		soundOnButton = game.add.button(20, game.world.height-125, 'soundOnButton', onSoundOnButton, this);
 		soundOnButton.anchor.set(0.5);
 		
 		
@@ -1455,26 +1455,22 @@
 		startButton1.visible=false;
 		startButton.visible=true;
 	}
-	
-	function homeButton(){
-		location.reload();
-		
-	}
-	function pauseButton(){
-		pause=true;
-		playingAddition=false;
-		playingSubstraction=false;
-		playingMultiplication=false;
-		playingDivision=false;
-		rocket.body.velocity.set(0,0);
-		asteroid1.body.velocity.set(0,0);
-		pauseButton.visible=false;			
-		playButton.visible=true;
-		game.time.events.remove(timerEvents);
-			
+
+
+	function onHomeButton() {
+		goHome();
 	}
 
-	function playButton() {
+	function onPauseButton() {
+		pause = true;
+		rocket.body.velocity.set(0,0);
+		asteroid1.body.velocity.set(0,0);
+		pauseButton.visible = false;
+		playButton.visible = true;
+		game.time.events.remove(timerEvents);
+	}
+
+	function onPlayButton() {
 		pause = false;
 		rocket.body.velocity.set(0,0);
 
@@ -1486,8 +1482,7 @@
 		timerEvents = game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 	}
 
-	function soundOffButton() {
-
+	function onSoundOffButton() {
 		soundMuted = false;
 
 		backgroundAudio.mute = false;
@@ -1501,8 +1496,7 @@
 		updateSoundButtons();
 	}
 
-	function soundOnButton() {
-
+	function onSoundOnButton() {
 		soundMuted = true;
 
 		backgroundAudio.mute = true;
@@ -1527,16 +1521,17 @@
 	}
 	
 	function success(){
-		
 		successButton.visible=false;
 	}
+
 	function failure(){
-		
 		failureButton.visible=false;
 	}
+
 	function lost(){
 		location.reload();
 	}
+
 	function win(){
 		location.reload();
 	}
