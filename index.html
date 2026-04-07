@@ -56,7 +56,7 @@
 	var startButton;
 	
 	var addQuizText;
-	var subQuiztext;
+	var subQuizText;
 	var multiQuizText;
 	var divQuizText;
 	
@@ -134,7 +134,7 @@
 		game.load.audio('backgroundAudio', 'start1.mp3');
 		game.load.audio('startAudio', 'start.wav');
 		game.load.audio('successAudio','assets/audio/success.mp3');
-		game.load.audio('keyPressAudio','assets/audio/keypress.mp3');
+		game.load.audio('keyPressAudio','assets/audio/keyPress.mp3');
 		game.load.audio('lostAudio','losing.wav');
 		game.load.audio('gainAudio','assets/audio/gainAudio.mp3');
 		game.load.audio('overAudio','assets/audio/overAudio.wav');
@@ -432,7 +432,6 @@
 		hideGameUI();
 
 		fond1.visible = true;
-		fond.visible = false;
 		fond2.visible = false;
 		fond3.visible = false;
 		fond4.visible = false;
@@ -440,12 +439,15 @@
 		fondWin.visible = false;
 
 		rocket.visible = false;
+		asteroid1.visible = false;
+		planet1.visible = false;
 		planet2.visible = false;
 		planet3.visible = false;
 		planet4.visible = false;
 		planet5.visible = false;
-		etShip.visible = false;
-		etShip1.visible = false;
+		planet6.visible = false;
+		planet7.visible = false;
+		planet8.visible = false;
 
 		addButton.visible = false;
 		subButton.visible = false;
@@ -493,10 +495,15 @@
 
 		copyText.visible = false;
 		rocket.visible = true;
+		asteroid1.visible = true;
+		planet1.visible = true;
 		planet2.visible = true;
 		planet3.visible = true;
 		planet4.visible = true;
 		planet5.visible = true;
+		planet6.visible = true;
+		planet7.visible = true;
+		planet8.visible = true;
 
 		addButton.visible = true;
 		subButton.visible = true;
@@ -1040,7 +1047,7 @@
 	function showWinScreen() {
 		hideGameUI();
 
-		fond.visible = false;
+		fond1.visible = false;
 		fond2.visible = false;
 		fond3.visible = false;
 		fond4.visible = false;
@@ -1048,12 +1055,15 @@
 		fondWin.visible = true;
 
 		rocket.visible = false;
+		asteroid1.visible = false;
+		planet1.visible = false;
 		planet2.visible = false;
 		planet3.visible = false;
 		planet4.visible = false;
 		planet5.visible = false;
-		etShip.visible = false;
-		etShip1.visible = false;
+		planet6.visible = false;
+		planet7.visible = false;
+		planet8.visible = false;
 
 		var winTitle = game.add.text(game.world.centerX, 60, 'YOU WIN!', {
 			font: 'bold 34px Arial',
@@ -1085,17 +1095,28 @@
 	function showLoseScreen() {
 		hideGameUI();
 
+		fond1.visible = false;
+		fond2.visible = false;
+		fond3.visible = false;
+		fond4.visible = false;
+		fond5.visible = false;
+		fondWin.visible = false;
+
 		fondLost = game.add.sprite(0, 0, 'fondLost');
 		fondLost1 = game.add.sprite(game.world.centerX, game.world.centerY, 'fondLost1');
 		fondLost1.anchor.set(0.5);
 
 		rocket.visible = false;
+		asteroid1.visible = false;
+
+		planet1.visible = false;
 		planet2.visible = false;
 		planet3.visible = false;
 		planet4.visible = false;
 		planet5.visible = false;
-		etShip.visible = false;
-		etShip1.visible = false;
+		planet6.visible = false;
+		planet7.visible = false;
+		planet8.visible = false;
 
 		var loseTitle = game.add.text(game.world.centerX, 60, 'GAME OVER', {
 			font: 'bold 34px Arial',
