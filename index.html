@@ -119,6 +119,13 @@
 	var heart1;
 	var heart2;
 	var heart3;
+
+
+	var titleText;
+	var subtitleText;
+	var playMenuButton;
+	var howToPlayText;
+	var homeMenuButton;
 	
 	textStyle = { font: 'bold 18px Arial', fill: '#F39C12' };
 	textStyle1 = { font: 'bold 30px Arial', fill: '#8A2B56' };
@@ -414,9 +421,92 @@
 		text.visible=false;
 		fondWin= game.add.sprite(0, 0, 'fondWin');
 		fondWin.visible=false;
-		copyText = game.add.text(450, 300, 'By SIKO Thierry', textStyle);
+		//copyText = game.add.text(450, 300, 'By SIKO Thierry', textStyle);
+		copyText = game.add.text(game.world.centerX, game.world.height - 20, 'By SIKO Thierry', textStyle);
+		copyText.anchor.set(0.5);
+		showMenu();
 
 	}
+
+	function showMenu() {
+		hideGameUI();
+
+		fond1.visible = true;
+		fond.visible = false;
+		fond2.visible = false;
+		fond3.visible = false;
+		fond4.visible = false;
+		fond5.visible = false;
+		fondWin.visible = false;
+
+		rocket.visible = false;
+		planet2.visible = false;
+		planet3.visible = false;
+		planet4.visible = false;
+		planet5.visible = false;
+		etShip.visible = false;
+		etShip1.visible = false;
+
+		addButton.visible = false;
+		subButton.visible = false;
+		multiButton.visible = false;
+		divButton.visible = false;
+
+		startButton.visible = false;
+		startButton1.visible = false;
+
+		titleText = game.add.text(game.world.centerX, 55, 'SPACEMATH', {
+			font: 'bold 34px Arial',
+			fill: '#FFFFFF',
+			stroke: '#000000',
+			strokeThickness: 4
+		});
+		titleText.anchor.set(0.5);
+
+		subtitleText = game.add.text(game.world.centerX, 95, 'Arcade Math Game', {
+			font: '18px Arial',
+			fill: '#F1C40F'
+		});
+		subtitleText.anchor.set(0.5);
+
+		howToPlayText = game.add.text(game.world.centerX, 140,
+			'Move the rocket and hit the correct answer.\nAvoid enemy ships and wrong answers.',
+			{
+				font: '16px Arial',
+				fill: '#FFFFFF',
+				align: 'center'
+			}
+		);
+		howToPlayText.anchor.set(0.5);
+
+		playMenuButton = game.add.button(game.world.centerX, 235, 'startButton', openModeSelection, this);
+		playMenuButton.anchor.set(0.5);
+
+		copyText.visible = true;
+	}
+
+	function openModeSelection() {
+		if (titleText) titleText.destroy();
+		if (subtitleText) subtitleText.destroy();
+		if (howToPlayText) howToPlayText.destroy();
+		if (playMenuButton) playMenuButton.destroy();
+
+		copyText.visible = false;
+		rocket.visible = true;
+		planet2.visible = true;
+		planet3.visible = true;
+		planet4.visible = true;
+		planet5.visible = true;
+
+		addButton.visible = true;
+		subButton.visible = true;
+		multiButton.visible = true;
+		divButton.visible = true;
+
+		startAudio.play();
+	}
+
+
 	function update() {
 
 		game.physics.arcade.collide(rocket,numbers,rocketHitNumber);
@@ -797,7 +887,7 @@
 		killTween.start();
 		score += 10;
 		scoreText.setText(score);
-		if(score === planetInfo.count.row*planetInfo.count.col*10) {
+		<!--if(score === planetInfo.count.row*planetInfo.count.col*10) {
 			fondWin.visible=true;
 				winButton = game.add.button(game.world.width/2, (game.world.height/2)+100, 'winButton', win, this);
 				winButton.anchor.set(0.5);
@@ -833,6 +923,34 @@
 		  backgroundAudio.stop();
 		  gainAudio.play();
 		  asteroid1.body.velocity.set(0,0);
+		}-->
+
+		if(score === planetInfo.count.row*planetInfo.count.col*10) {
+			if (playingAddition) {
+				playingAddition = false;
+				addQuizText.visible = false;
+			}
+			else if (playingSubstraction) {
+				playingSubstraction = false;
+				subQuizText.visible = false;
+			}
+			else if (playingMultiplication) {
+				playingMultiplication = false;
+				multiQuizText.visible = false;
+			}
+			else if (playingDivision) {
+				playingDivision = false;
+				divQuizText.visible = false;
+			}
+
+			game.time.events.remove(timerEvents);
+			successAudio.mute = true;
+			lostAudio.mute = true;
+			backgroundAudio.stop();
+			gainAudio.play();
+
+			showWinScreen();
+			return;
 		}
 		
 		arr.splice(posAnswer,1);
@@ -901,7 +1019,7 @@
 			game.time.events.add(Phaser.Timer.SECOND *1, failure, this);  
 			lostAudio.play();
 		}
-		else {
+		<!--else {
 			heart1.visible=false;
 			heart2.visible=false;
 			heart3.visible=false;
@@ -938,10 +1056,24 @@
 			backgroundAudio.stop();
 			overAudio.play();
 			asteroid1.body.velocity.set(0,0);
+		}-->
+
+		else {
+			heart1.visible = false;
+			heart2.visible = false;
+			heart3.visible = false;
+
+			game.time.events.remove(timerEvents);
+			successAudio.mute = true;
+			lostAudio.mute = true;
+			backgroundAudio.stop();
+			overAudio.play();
+
+			showLoseScreen();
 		}
 	}
 	
-	function startGame() {
+	<!--function startGame() {
 		startButton.destroy();
 		startButton1.destroy();
 		addButton.visible=true;
@@ -951,7 +1083,140 @@
 		startAudio.play();
 		copyText.visible=false;
 	}
-	
+	-->
+	function startGame() {
+		openModeSelection();
+	}
+
+
+	function hideGameUI() {
+		upButton.visible = false;
+		leftButton.visible = false;
+		rightButton.visible = false;
+		downButton.visible = false;
+
+		pauseButton.visible = false;
+		playButton.visible = false;
+		homeButton.visible = false;
+		soundOffButton.visible = false;
+		soundOnButton.visible = false;
+
+		successButton.visible = false;
+		failureButton.visible = false;
+
+		barScore.visible = false;
+		barQuiz.visible = false;
+		barLives.visible = false;
+
+		scoreText.visible = false;
+		scoreIcon.visible = false;
+		timeIcon.visible = false;
+		text.visible = false;
+
+		heart1.visible = false;
+		heart2.visible = false;
+		heart3.visible = false;
+
+		if (addQuizText) addQuizText.visible = false;
+		if (subQuizText) subQuizText.visible = false;
+		if (multiQuizText) multiQuizText.visible = false;
+		if (divQuizText) divQuizText.visible = false;
+	}
+
+	function showWinScreen() {
+		hideGameUI();
+
+		fond.visible = false;
+		fond2.visible = false;
+		fond3.visible = false;
+		fond4.visible = false;
+		fond5.visible = false;
+		fondWin.visible = true;
+
+		rocket.visible = false;
+		planet2.visible = false;
+		planet3.visible = false;
+		planet4.visible = false;
+		planet5.visible = false;
+		etShip.visible = false;
+		etShip1.visible = false;
+
+		var winTitle = game.add.text(game.world.centerX, 60, 'YOU WIN!', {
+			font: 'bold 34px Arial',
+			fill: '#2ECC71',
+			stroke: '#000000',
+			strokeThickness: 4
+		});
+		winTitle.anchor.set(0.5);
+
+		var winScore = game.add.text(game.world.centerX, 120, 'Score: ' + score, {
+			font: '24px Arial',
+			fill: '#FFFFFF'
+		});
+		winScore.anchor.set(0.5);
+
+		var winTime = game.add.text(game.world.centerX, 155, 'Time: ' + Time + 's', {
+			font: '24px Arial',
+			fill: '#FFFFFF'
+		});
+		winTime.anchor.set(0.5);
+
+		var replayBtn = game.add.button(game.world.centerX, 230, 'winButton', restartGame, this);
+		replayBtn.anchor.set(0.5);
+
+		var homeBtn = game.add.button(game.world.centerX, 280, 'homeButton', goHome, this);
+		homeBtn.anchor.set(0.5);
+	}
+
+	function showLoseScreen() {
+		hideGameUI();
+
+		fondLost = game.add.sprite(0, 0, 'fondLost');
+		fondLost1 = game.add.sprite(game.world.centerX, game.world.centerY, 'fondLost1');
+		fondLost1.anchor.set(0.5);
+
+		rocket.visible = false;
+		planet2.visible = false;
+		planet3.visible = false;
+		planet4.visible = false;
+		planet5.visible = false;
+		etShip.visible = false;
+		etShip1.visible = false;
+
+		var loseTitle = game.add.text(game.world.centerX, 60, 'GAME OVER', {
+			font: 'bold 34px Arial',
+			fill: '#E74C3C',
+			stroke: '#000000',
+			strokeThickness: 4
+		});
+		loseTitle.anchor.set(0.5);
+
+		var loseScore = game.add.text(game.world.centerX, 120, 'Score: ' + score, {
+			font: '24px Arial',
+			fill: '#FFFFFF'
+		});
+		loseScore.anchor.set(0.5);
+
+		var loseTime = game.add.text(game.world.centerX, 155, 'Time: ' + Time + 's', {
+			font: '24px Arial',
+			fill: '#FFFFFF'
+		});
+		loseTime.anchor.set(0.5);
+
+		var replayBtn = game.add.button(game.world.centerX, 230, 'lostButton', restartGame, this);
+		replayBtn.anchor.set(0.5);
+
+		var homeBtn = game.add.button(game.world.centerX, 280, 'homeButton', goHome, this);
+		homeBtn.anchor.set(0.5);
+	}
+
+	function restartGame() {
+		location.reload();
+	}
+
+	function goHome() {
+		location.reload();
+	}
 	
 	function startAddition() {
 		scoreIcon.visible=true;
