@@ -129,7 +129,7 @@
 	var homeMenuButton;
 
 	var level = 1;
-
+	var levelText;
 
 	textStyle = { font: 'bold 18px Arial', fill: '#F39C12' };
 	textStyle1 = { font: 'bold 30px Arial', fill: '#8A2B56' };
@@ -431,7 +431,7 @@
 		copyText.anchor.set(0.5);
 		showMenu();
 
-		var levelText = game.add.text(game.world.centerX, 8, 'Level: 1', textStyle);
+		levelText = game.add.text(game.world.centerX, 8, 'Level: 1', textStyle);
 		levelText.anchor.set(0.5);
 		levelText.visible = false;
 
@@ -693,17 +693,6 @@
 	function initMultiNumbers() {
 		var max = 20 + level * 10;
 		answer = Phaser.Math.between(1, max);
-		//arr = buildUniqueAnswers(answer, 8, 1, 100);
-		arr = buildSmartUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col);
-
-		posAnswer = arr.indexOf(answer);
-
-		var ind = Phaser.Math.between(0, (getFactors(answer).length)-1);
-		number1 = getFactors(answer)[ind];
-		number2 = answer / number1;
-
-		multiQuizText = game.add.text(5, game.world.height-32, number1+' x '+ number2+' = ? ', textStyle);
-		multiQuizText.visible = false;
 
 		planetInfo = {
 			width: 30,
@@ -712,6 +701,16 @@
 			offset: { top: 30, left: 150 },
 			padding: 80
 		};
+
+		arr = buildSmartUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col);
+		posAnswer = arr.indexOf(answer);
+
+		var ind = Phaser.Math.between(0, (getFactors(answer).length)-1);
+		number1 = getFactors(answer)[ind];
+		number2 = answer / number1;
+
+		multiQuizText = game.add.text(5, game.world.height-32, number1+' x '+ number2+' = ? ', textStyle);
+		multiQuizText.visible = false;
 
 		numbers = game.add.group();
 
