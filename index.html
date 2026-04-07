@@ -917,9 +917,6 @@
 		killTween.start();
 		score += 10;
 
-		if (score % 50 === 0) {
-			level++;
-		}
 		scoreText.setText(score);
 
 		if(score === planetInfo.count.row * planetInfo.count.col * 10) {
@@ -997,8 +994,11 @@
 		heart2.visible = true;
 		heart3.visible = true;
 
-		// nettoyer anciens nombres
 		if (numbers) numbers.destroy();
+		if (addQuizText) addQuizText.destroy();
+		if (subQuizText) subQuizText.destroy();
+		if (multiQuizText) multiQuizText.destroy();
+		if (divQuizText) divQuizText.destroy();
 
 		// relancer le bon mode
 		if (playingAddition) {
@@ -1206,12 +1206,22 @@
 		var homeBtn = game.add.button(game.world.centerX, 280, 'homeButton', goHome, this);
 		homeBtn.anchor.set(0.5);
 
-		levelText.setText('Level: ' + level + ' - Try again');
+
+		var loseLevel = game.add.text(game.world.centerX, 185, 'Level ' + level + ' - Try again', {
+		font: '20px Arial',
+		fill: '#FFFFFF'
+		});
+		loseLevel.anchor.set(0.5);
 	}
 
 	function restartGame() {
-
 		game.time.events.remove(timerEvents);
+
+		var currentMode = null;
+		if (playingAddition) currentMode = 'add';
+		else if (playingSubstraction) currentMode = 'sub';
+		else if (playingMultiplication) currentMode = 'mul';
+		else if (playingDivision) currentMode = 'div';
 
 		score = 0;
 		Time = 0;
@@ -1220,16 +1230,16 @@
 		game.world.removeAll();
 		create();
 
-		if (playingAddition) {
+		if (currentMode === 'add') {
 			startAddition();
 		}
-		else if (playingSubstraction) {
+		else if (currentMode === 'sub') {
 			startSubstraction();
 		}
-		else if (playingMultiplication) {
+		else if (currentMode === 'mul') {
 			startMultiplication();
 		}
-		else if (playingDivision) {
+		else if (currentMode === 'div') {
 			startDivision();
 		}
 	}
@@ -1241,6 +1251,11 @@
 	}
 	
 	function startAddition() {
+		playingAddition = true;
+		playingSubstraction = false;
+		playingMultiplication = false;
+		playingDivision = false;
+
 		scoreIcon.visible=true;
 		scoreText.visible=true;
 		timeIcon.visible=true;
@@ -1281,7 +1296,13 @@
 		levelText.visible = true;
 		
 	}
+
 	function startSubstraction() {
+		playingAddition = false;
+		playingSubstraction = true;
+		playingMultiplication = false;
+		playingDivision = false;
+
 		scoreIcon.visible=true;
 		scoreText.visible=true;
 		timeIcon.visible=true;
@@ -1324,6 +1345,11 @@
 	}
 
 	function startMultiplication() {
+		playingAddition = false;
+		playingSubstraction = false;
+		playingMultiplication = true;
+		playingDivision = false;
+
 		scoreIcon.visible=true;
 		scoreText.visible=true;
 		timeIcon.visible=true;
@@ -1365,6 +1391,11 @@
 	}
 
 	function startDivision() {
+		playingAddition = false;
+		playingSubstraction = false;
+		playingMultiplication = false;
+		playingDivision = true;
+
 		scoreIcon.visible=true;
 		scoreText.visible=true;
 		timeIcon.visible=true;
@@ -1442,17 +1473,17 @@
 		game.time.events.remove(timerEvents);
 			
 	}
-		function playButton(){
-			playingAddition=true;
-			playingSubstraction=true;
-			playingMultiplication=true;
-			playingDivision=true;
-			pause=false;
-			rocket.body.velocity.set(0,0);
-			asteroid1.body.velocity.set(80, -80);
-			playButton.visible=false;
-			pauseButton.visible=true;
-			timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
+
+	function playButton() {
+		pause = false;
+		rocket.body.velocity.set(0,0);
+
+		var speed = -80 - (level * 10);
+		asteroid1.body.velocity.set(speed, speed);
+
+		playButton.visible = false;
+		pauseButton.visible = true;
+		timerEvents = game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 	}
 
 	function soundOffButton() {
