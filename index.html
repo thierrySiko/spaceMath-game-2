@@ -485,6 +485,9 @@
 		playMenuButton.anchor.set(0.5);
 
 		copyText.visible = true;
+
+		soundOnButton.visible = true;
+		soundOffButton.visible = false;
 	}
 
 	function openModeSelection() {
@@ -1020,7 +1023,7 @@
 		playButton.visible = false;
 		homeButton.visible = false;
 		soundOffButton.visible = false;
-		soundOnButton.visible = false;
+		soundOnButton.visible = true;
 
 		successButton.visible = false;
 		failureButton.visible = false;
@@ -1368,7 +1371,7 @@
 		successAudio.mute=true;
 		lostAudio.mute=true;
 		keyPressAudio.mute=true;
-		soundOnButton.visible=false;
+		soundOnButton.visible=true;
 		soundOffButton.visible=true;
 		
 		overAudio.mute=true;
