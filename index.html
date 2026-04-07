@@ -98,6 +98,7 @@
 	var playButton;
 	var soundOffButton;
 	var soundOnButton;
+	var soundMuted = false;
 	var successButton;
 	var failureButton;
 	var winButton;
@@ -486,8 +487,7 @@
 
 		copyText.visible = true;
 
-		soundOnButton.visible = true;
-		soundOffButton.visible = false;
+		updateSoundButtons();
 	}
 
 	function openModeSelection() {
@@ -1022,8 +1022,7 @@
 		pauseButton.visible = false;
 		playButton.visible = false;
 		homeButton.visible = false;
-		soundOffButton.visible = false;
-		soundOnButton.visible = true;
+		updateSoundButtons();
 
 		successButton.visible = false;
 		failureButton.visible = false;
@@ -1198,7 +1197,10 @@
 		barScore.visible=true;
 		barQuiz.visible=true;
 		barLives.visible=true;
-		
+
+		soundOnButton.visible = true;
+		soundOffButton.visible = true;
+		updateSoundButtons();
 		
 	}
 	function startSubstraction() {
@@ -1234,7 +1236,12 @@
 		barScore.visible=true;
 		barQuiz.visible=true;
 		barLives.visible=true;
+
+		soundOnButton.visible = true;
+		soundOffButton.visible = true;
+		updateSoundButtons();
 	}
+
 	function startMultiplication() {
 		scoreIcon.visible=true;
 		scoreText.visible=true;
@@ -1267,7 +1274,12 @@
 		barScore.visible=true;
 		barQuiz.visible=true;
 		barLives.visible=true;
+
+		soundOnButton.visible = true;
+		soundOffButton.visible = true;
+		updateSoundButtons();
 	}
+
 	function startDivision() {
 		scoreIcon.visible=true;
 		scoreText.visible=true;
@@ -1298,6 +1310,10 @@
 		barScore.visible=true;
 		barQuiz.visible=true;
 		barLives.visible=true;
+
+		soundOnButton.visible = true;
+		soundOffButton.visible = true;
+		updateSoundButtons();
 	}
 	
 	function getFactors(n){
@@ -1351,31 +1367,45 @@
 			pauseButton.visible=true;
 			timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 	}
+
 	function soundOffButton() {
 
-		backgroundAudio.mute=false;
-		startAudio.mute=false;
-		successAudio.mute=false;
-		lostAudio.mute=false;
-		keyPressAudio.mute=false;
-		soundOffButton.visible=false;
-		soundOnButton.visible=true;
-		
-		overAudio.mute=false;
-		gainAudio.mute=false;
-		
+		soundMuted = false;
+
+		backgroundAudio.mute = false;
+		startAudio.mute = false;
+		successAudio.mute = false;
+		lostAudio.mute = false;
+		keyPressAudio.mute = false;
+		overAudio.mute = false;
+		gainAudio.mute = false;
+
+		updateSoundButtons();
 	}
+
 	function soundOnButton() {
-		backgroundAudio.mute=true;
-		startAudio.mute=true;
-		successAudio.mute=true;
-		lostAudio.mute=true;
-		keyPressAudio.mute=true;
-		soundOnButton.visible=true;
-		soundOffButton.visible=true;
-		
-		overAudio.mute=true;
-		gainAudio.mute=true;
+
+		soundMuted = true;
+
+		backgroundAudio.mute = true;
+		startAudio.mute = true;
+		successAudio.mute = true;
+		lostAudio.mute = true;
+		keyPressAudio.mute = true;
+		overAudio.mute = true;
+		gainAudio.mute = true;
+
+		updateSoundButtons();
+	}
+
+	function updateSoundButtons() {
+		if (soundMuted) {
+			soundOnButton.visible = false;
+			soundOffButton.visible = true;
+		} else {
+			soundOnButton.visible = true;
+			soundOffButton.visible = false;
+		}
 	}
 	
 	function success(){
