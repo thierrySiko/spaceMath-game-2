@@ -386,11 +386,11 @@
 		soundOnButton.anchor.set(0.5);
 		
 		
-		successButton = game.add.button(game.world.width/2, game.world.height/2, 'successButton', successButton, this);
+		successButton = game.add.button(game.world.width/2, game.world.height/2, 'successButton', onSuccessButton, this);
 		successButton.anchor.set(0.5);
 		successButton.visible=false;
 		
-		failureButton = game.add.button(game.world.width/2, game.world.height/2, 'failureButton', failureButton, this);
+		failureButton = game.add.button(game.world.width/2, game.world.height/2, 'failureButton', onFailureButton, this);
 		failureButton.anchor.set(0.5);
 		failureButton.visible=false;
 
@@ -1518,6 +1518,14 @@
 			soundOnButton.visible = true;
 			soundOffButton.visible = false;
 		}
+	}
+
+	function onSuccessButton() {
+		success();
+	}
+
+	function onFailureButton() {
+		failure();
 	}
 	
 	function success(){
