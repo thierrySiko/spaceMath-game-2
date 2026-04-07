@@ -887,43 +887,6 @@
 		killTween.start();
 		score += 10;
 		scoreText.setText(score);
-		<!--if(score === planetInfo.count.row*planetInfo.count.col*10) {
-			fondWin.visible=true;
-				winButton = game.add.button(game.world.width/2, (game.world.height/2)+100, 'winButton', win, this);
-				winButton.anchor.set(0.5);
-				winButton.visible=true;
-				if(playingAddition){
-					playingAddition=false;
-					addQuizText.visible=false;
-				}
-				else if(playingSubstraction){
-					playingSubstraction=false;
-					subQuizText.visible=false;
-				}
-				else if(playingMultiplication){
-					playingMultiplication=false;
-					multiQuizText.visible=false;
-				}
-				else if(playingDivision){
-					playingDivision=false;
-					divQuizText.visible=false;
-				}
-			game.time.events.remove(timerEvents);
-			finalTimeText= game.add.text(100, game.world.height-50,Time+'s', textStyle1);
-			timeIcon1=game.add.sprite(60, game.world.height-55,'timeIcon1');
-			finalScoreText=game.add.text(490, game.world.height-50,score, textStyle1);
-			scoreIcon1=game.add.sprite(450, game.world.height-50,'score1');
-			
-			var floss = game.add.sprite(300, 20, 'floss');
-		 var dance = floss.animations.add('dance');
-		  floss.animations.play('dance',5, true);
-		  //,[0,1,2,3,2,1,0,1,4,5,6,5,6,5,6,5,6,5,9,1]
-		  successAudio.mute=true;
-		lostAudio.mute=true;
-		  backgroundAudio.stop();
-		  gainAudio.play();
-		  asteroid1.body.velocity.set(0,0);
-		}-->
 
 		if(score === planetInfo.count.row*planetInfo.count.col*10) {
 			if (playingAddition) {
@@ -1019,44 +982,6 @@
 			game.time.events.add(Phaser.Timer.SECOND *1, failure, this);  
 			lostAudio.play();
 		}
-		<!--else {
-			heart1.visible=false;
-			heart2.visible=false;
-			heart3.visible=false;
-			fondLost= game.add.sprite(0, 0, 'fondLost');
-			fondLost1= game.add.sprite(game.world.width*0.5, game.world.height*0.5, 'fondLost1');
-			fondLost1.anchor.set(0.5);
-			lostButton = game.add.button(game.world.width/2, (game.world.height/2)+100, 'lostButton', lost, this);
-			lostButton.anchor.set(0.5);
-			lostButton.visible=true;
-			if(playingAddition){
-					playingAddition=false;
-					addQuizText.visible=false;
-				}
-				else if(playingSubstraction){
-					playingSubstraction=false;
-					subQuizText.visible=false;
-				}
-				else if(playingMultiplication){
-					playingMultiplication=false;
-					multiQuizText.visible=false;
-				}
-				else if(playingDivision){
-					playingDivision=false;
-					divQuizText.visible=false;
-				}
-			game.time.events.remove(timerEvents);
-			finalTimeText= game.add.text(100, game.world.height-50,Time+'s', textStyle1);
-			timeIcon1=game.add.sprite(60, game.world.height-55,'timeIcon1');
-			finalScoreText=game.add.text(490, game.world.height-50,score, textStyle1);
-			scoreIcon1=game.add.sprite(450, game.world.height-50,'score1');
-			
-			successAudio.mute=true;
-			lostAudio.mute=true;
-			backgroundAudio.stop();
-			overAudio.play();
-			asteroid1.body.velocity.set(0,0);
-		}-->
 
 		else {
 			heart1.visible = false;
@@ -1072,18 +997,7 @@
 			showLoseScreen();
 		}
 	}
-	
-	<!--function startGame() {
-		startButton.destroy();
-		startButton1.destroy();
-		addButton.visible=true;
-		subButton.visible=true;
-		multiButton.visible=true;
-		divButton.visible=true;
-		startAudio.play();
-		copyText.visible=false;
-	}
-	-->
+
 	function startGame() {
 		openModeSelection();
 	}
