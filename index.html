@@ -135,8 +135,6 @@
 	textStyle1 = { font: 'bold 30px Arial', fill: '#8A2B56' };
 	var numberStyle= { font: 'bold 15px Arial', fill: '#F0F3F4' };
 
-	var levelText = game.add.text(game.world.centerX, 8, 'Level: 1', textStyle);
-
 	function preload() {
 		game.load.audio('backgroundAudio', 'start1.mp3');
 		game.load.audio('startAudio', 'start.wav');
@@ -433,6 +431,7 @@
 		copyText.anchor.set(0.5);
 		showMenu();
 
+		var levelText = game.add.text(game.world.centerX, 8, 'Level: 1', textStyle);
 		levelText.anchor.set(0.5);
 		levelText.visible = false;
 
