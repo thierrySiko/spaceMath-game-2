@@ -127,7 +127,10 @@
 	var playMenuButton;
 	var howToPlayText;
 	var homeMenuButton;
-	
+
+	var level = 1;
+	var levelText = game.add.text(game.world.centerX, 8, 'Level: 1', textStyle);
+
 	textStyle = { font: 'bold 18px Arial', fill: '#F39C12' };
 	textStyle1 = { font: 'bold 30px Arial', fill: '#8A2B56' };
 	var numberStyle= { font: 'bold 15px Arial', fill: '#F0F3F4' };
@@ -423,9 +426,12 @@
 		fondWin= game.add.sprite(0, 0, 'fondWin');
 		fondWin.visible=false;
 		//copyText = game.add.text(450, 300, 'By SIKO Thierry', textStyle);
-		copyText = game.add.text(game.world.centerX, game.world.height - 20, 'By SIKO Thierry', textStyle);
+		copyText = game.add.text(game.world.centerX + 10, game.world.height - 20, 'By SIKO Thierry', textStyle);
 		copyText.anchor.set(0.5);
 		showMenu();
+
+		levelText.anchor.set(0.5);
+		levelText.visible = false;
 
 	}
 
@@ -570,13 +576,14 @@
 			}
 	}
 
-	function buildUniqueAnswers(correctAnswer, totalChoices, min, max) {
+	function buildSmartUniqueAnswers(correctAnswer, totalChoices) {
 		var results = [correctAnswer];
 
 		while (results.length < totalChoices) {
-			var candidate = Phaser.Math.between(min, max);
+			var offset = Phaser.Math.between(-10, 10);
+			var candidate = correctAnswer + offset;
 
-			if (results.indexOf(candidate) === -1) {
+			if (candidate > 0 && results.indexOf(candidate) === -1) {
 				results.push(candidate);
 			}
 		}
@@ -586,8 +593,9 @@
 	}
 
 	function initAddNumbers() {
-		number1 = Phaser.Math.between(1, 20);
-		number2 = Phaser.Math.between(1, 20);
+		var max = 10 + level * 5;
+		number1 = Phaser.Math.between(1, max);
+		number2 = Phaser.Math.between(1, max);
 		answer = number1 + number2;
 
 		addQuizText = game.add.text(5, game.world.height-32, number1+' + '+ number2+' = ? ', textStyle);
@@ -601,8 +609,7 @@
 			padding: 80
 		};
 
-
-		arr = buildUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col, 2, 40);
+		arr = buildSmartUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col);
 		posAnswer = arr.indexOf(answer);
 
 		numbers = game.add.group();
@@ -634,8 +641,9 @@
 	}
 
 	function initSubNumbers() {
-		number1 = Phaser.Math.between(20, 40);
-		number2 = Phaser.Math.between(1, 20);
+		var max = 20 + level * 5;
+		number1 = Phaser.Math.between(max/2, max);
+		number2 = Phaser.Math.between(1, max/2);
 		answer = number1 - number2;
 
 		subQuizText = game.add.text(5, game.world.height-32, number1+' - '+ number2+' = ? ', textStyle);
@@ -649,7 +657,7 @@
 			padding: 80
 		};
 
-		arr = buildUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col, 1, 40);
+		arr = buildSmartUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col);
 		posAnswer = arr.indexOf(answer);
 
 		numbers = game.add.group();
@@ -681,8 +689,10 @@
 	}
 
 	function initMultiNumbers() {
-		answer = Phaser.Math.between(1, 100);
-		arr = buildUniqueAnswers(answer, 8, 1, 100);
+		var max = 20 + level * 10;
+		answer = Phaser.Math.between(1, max);
+		//arr = buildUniqueAnswers(answer, 8, 1, 100);
+		arr = buildSmartUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col);
 
 		posAnswer = arr.indexOf(answer);
 
@@ -730,7 +740,8 @@
 	}
 
 	function initDivNumbers() {
-		number1 = Phaser.Math.between(1, 100);
+		var max = 20 + level * 10;
+		number1 = Phaser.Math.between(1, max);
 		var ind = Phaser.Math.between(0, (getFactors(number1).length)-1);
 		number2 = getFactors(number1)[ind];
 
@@ -747,7 +758,8 @@
 			padding: 80
 		};
 
-		arr = buildUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col, 1, 20);
+		//arr = buildUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col, 1, 20);
+		arr = buildSmartUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col);
 		posAnswer = arr.indexOf(answer);
 
 		numbers = game.add.group();
@@ -903,6 +915,10 @@
 		}, this);
 		killTween.start();
 		score += 10;
+
+		if (score % 50 === 0) {
+			level++;
+		}
 		scoreText.setText(score);
 
 		if(score === planetInfo.count.row*planetInfo.count.col*10) {
@@ -1193,7 +1209,8 @@
 		leftButton.visible=true;
 		rightButton.visible=true;
 		downButton.visible=true;
-		asteroid1.body.velocity.set(-80,-80);
+		var speed = -80 - (level * 10);
+		asteroid1.body.velocity.set(speed, speed);
 		pauseButton.visible=true;
 		homeButton.visible=true;
 		
@@ -1208,6 +1225,8 @@
 		soundOnButton.visible = true;
 		soundOffButton.visible = true;
 		updateSoundButtons();
+
+		levelText.visible = true;
 		
 	}
 	function startSubstraction() {
@@ -1232,7 +1251,8 @@
 		leftButton.visible=true;
 		rightButton.visible=true;
 		downButton.visible=true;
-		asteroid1.body.velocity.set(-80,-80);
+		var speed = -80 - (level * 10);
+		asteroid1.body.velocity.set(speed, speed);
 		pauseButton.visible=true;
 		homeButton.visible=true;
 		
@@ -1247,6 +1267,8 @@
 		soundOnButton.visible = true;
 		soundOffButton.visible = true;
 		updateSoundButtons();
+
+		levelText.visible = true;
 	}
 
 	function startMultiplication() {
@@ -1270,7 +1292,8 @@
 		leftButton.visible=true;
 		rightButton.visible=true;
 		downButton.visible=true;
-		asteroid1.body.velocity.set(-80,-80);
+		var speed = -80 - (level * 10);
+		asteroid1.body.velocity.set(speed, speed);
 		pauseButton.visible=true;
 		homeButton.visible=true;
 		
@@ -1285,6 +1308,8 @@
 		soundOnButton.visible = true;
 		soundOffButton.visible = true;
 		updateSoundButtons();
+
+		levelText.visible = true;
 	}
 
 	function startDivision() {
@@ -1306,7 +1331,8 @@
 		leftButton.visible=true;
 		rightButton.visible=true;
 		downButton.visible=true;
-		asteroid1.body.velocity.set(-80,-80);
+		var speed = -80 - (level * 10);
+		asteroid1.body.velocity.set(speed, speed);
 		pauseButton.visible=true;
 		homeButton.visible=true;
 		
@@ -1321,6 +1347,8 @@
 		soundOnButton.visible = true;
 		soundOffButton.visible = true;
 		updateSoundButtons();
+
+		levelText.visible = true;
 	}
 	
 	function getFactors(n){
@@ -1448,12 +1476,10 @@
 	}
 	
 	function updateTime() {
-
-    Time++;
-
-    text.setText(Time+'s');
-
-}
+		Time++;
+		text.setText(Time+'s');
+		levelText.setText('Level: ' + level);
+	}
 </script>
 </body>
 </html>
