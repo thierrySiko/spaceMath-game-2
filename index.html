@@ -569,56 +569,215 @@
 				}
 			}
 	}
-	
-	function initAddNumbers() {
-			number1=Phaser.Math.between(1,20);
-			number2=Phaser.Math.between(1,20);
-			answer=number1+number2;
-			arr[posAnswer]=answer;
-			addQuizText = game.add.text(5, game.world.height-32, number1+' + '+ number2+' = ? ', textStyle);
-			addQuizText.visible=false;
-			planetInfo = {
-				width: 30,
-				height: 30,
-				count: {
-					row: 4,
-					col: 2,
-				},
-				offset: {
-					top: 30,
-					left: 150
-				},
-				padding: 80
+
+	function buildUniqueAnswers(correctAnswer, totalChoices, min, max) {
+		var results = [correctAnswer];
+
+		while (results.length < totalChoices) {
+			var candidate = Phaser.Math.between(min, max);
+
+			if (results.indexOf(candidate) === -1) {
+				results.push(candidate);
 			}
-			numbers = game.add.group();
-			
-			for(i=0;i<posAnswer;i++){
-				arr[i]=Phaser.Math.between(2,40);
-			}
-			for(i=posAnswer+1;i<planetInfo.count.col*planetInfo.count.row;i++){
-				arr[i]=Phaser.Math.between(2,40);
-			}
-			i=0;
-			j=0;
-			
-			for(c=0; c<planetInfo.count.col; c++) {
-				for(r=0; r<planetInfo.count.row; r++) {
-					number=arr[i];
-					var planetX = (r*(planetInfo.width+planetInfo.padding))+planetInfo.offset.left;
-					var planetY = (c*(planetInfo.height+planetInfo.padding))+planetInfo.offset.top;
-					newPlanetText = game.add.text(planetX, planetY, number, numberStyle);
-					game.physics.enable(newPlanetText, Phaser.Physics.ARCADE);
-					newPlanetText.body.immovable = true;
-					newPlanetText.anchor.set(0.5);
-					numbers.add(newPlanetText);
-					arrX[j]=planetX;
-					arrY[j]=planetY;
-					i++;
-					j++;
-				}
 		}
-	
+
+		Phaser.ArrayUtils.shuffle(results);
+		return results;
 	}
+
+	function initAddNumbers() {
+		number1 = Phaser.Math.between(1, 20);
+		number2 = Phaser.Math.between(1, 20);
+		answer = number1 + number2;
+
+		addQuizText = game.add.text(5, game.world.height-32, number1+' + '+ number2+' = ? ', textStyle);
+		addQuizText.visible = false;
+
+		planetInfo = {
+			width: 30,
+			height: 30,
+			count: { row: 4, col: 2 },
+			offset: { top: 30, left: 150 },
+			padding: 80
+		};
+
+
+		arr = buildUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col, 2, 40);
+		posAnswer = arr.indexOf(answer);
+
+		numbers = game.add.group();
+
+		i = 0;
+		j = 0;
+
+		for (c = 0; c < planetInfo.count.col; c++) {
+			for (r = 0; r < planetInfo.count.row; r++) {
+				number = arr[i];
+
+				var planetX = (r*(planetInfo.width+planetInfo.padding))+planetInfo.offset.left;
+				var planetY = (c*(planetInfo.height+planetInfo.padding))+planetInfo.offset.top;
+
+				newPlanetText = game.add.text(planetX, planetY, number, numberStyle);
+				game.physics.enable(newPlanetText, Phaser.Physics.ARCADE);
+				newPlanetText.body.immovable = true;
+				newPlanetText.anchor.set(0.5);
+
+				numbers.add(newPlanetText);
+
+				arrX[j] = planetX;
+				arrY[j] = planetY;
+
+				i++;
+				j++;
+			}
+		}
+	}
+
+	function initSubNumbers() {
+		number1 = Phaser.Math.between(20, 40);
+		number2 = Phaser.Math.between(1, 20);
+		answer = number1 - number2;
+
+		subQuizText = game.add.text(5, game.world.height-32, number1+' - '+ number2+' = ? ', textStyle);
+		subQuizText.visible = false;
+
+		planetInfo = {
+			width: 30,
+			height: 30,
+			count: { row: 4, col: 2 },
+			offset: { top: 30, left: 150 },
+			padding: 80
+		};
+
+		arr = buildUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col, 1, 40);
+		posAnswer = arr.indexOf(answer);
+
+		numbers = game.add.group();
+
+		i = 0;
+		j = 0;
+
+		for (c = 0; c < planetInfo.count.col; c++) {
+			for (r = 0; r < planetInfo.count.row; r++) {
+				number = arr[i];
+
+				var planetX = (r*(planetInfo.width+planetInfo.padding))+planetInfo.offset.left;
+				var planetY = (c*(planetInfo.height+planetInfo.padding))+planetInfo.offset.top;
+
+				newPlanetText = game.add.text(planetX, planetY, number, numberStyle);
+				game.physics.enable(newPlanetText, Phaser.Physics.ARCADE);
+				newPlanetText.body.immovable = true;
+				newPlanetText.anchor.set(0.5);
+
+				numbers.add(newPlanetText);
+
+				arrX[j] = planetX;
+				arrY[j] = planetY;
+
+				i++;
+				j++;
+			}
+		}
+	}
+
+	function initMultiNumbers() {
+		answer = Phaser.Math.between(1, 100);
+		arr = buildUniqueAnswers(answer, 8, 1, 100);
+
+		posAnswer = arr.indexOf(answer);
+
+		var ind = Phaser.Math.between(0, (getFactors(answer).length)-1);
+		number1 = getFactors(answer)[ind];
+		number2 = answer / number1;
+
+		multiQuizText = game.add.text(5, game.world.height-32, number1+' x '+ number2+' = ? ', textStyle);
+		multiQuizText.visible = false;
+
+		planetInfo = {
+			width: 30,
+			height: 30,
+			count: { row: 4, col: 2 },
+			offset: { top: 30, left: 150 },
+			padding: 80
+		};
+
+		numbers = game.add.group();
+
+		i = 0;
+		j = 0;
+
+		for (c = 0; c < planetInfo.count.col; c++) {
+			for (r = 0; r < planetInfo.count.row; r++) {
+				number = arr[i];
+
+				var planetX = (r*(planetInfo.width+planetInfo.padding))+planetInfo.offset.left;
+				var planetY = (c*(planetInfo.height+planetInfo.padding))+planetInfo.offset.top;
+
+				newPlanetText = game.add.text(planetX, planetY, number, numberStyle);
+				game.physics.enable(newPlanetText, Phaser.Physics.ARCADE);
+				newPlanetText.body.immovable = true;
+				newPlanetText.anchor.set(0.5);
+
+				numbers.add(newPlanetText);
+
+				arrX[j] = planetX;
+				arrY[j] = planetY;
+
+				i++;
+				j++;
+			}
+		}
+	}
+
+	function initDivNumbers() {
+		number1 = Phaser.Math.between(1, 100);
+		var ind = Phaser.Math.between(0, (getFactors(number1).length)-1);
+		number2 = getFactors(number1)[ind];
+
+		answer = number1 / number2;
+
+		divQuizText = game.add.text(5, game.world.height-32, number1+' / '+ number2+' = ? ', textStyle);
+		divQuizText.visible = false;
+
+		planetInfo = {
+			width: 30,
+			height: 30,
+			count: { row: 4, col: 2 },
+			offset: { top: 30, left: 150 },
+			padding: 80
+		};
+
+		arr = buildUniqueAnswers(answer, planetInfo.count.row * planetInfo.count.col, 1, 20);
+		posAnswer = arr.indexOf(answer);
+
+		numbers = game.add.group();
+
+		i = 0;
+		j = 0;
+
+		for (c = 0; c < planetInfo.count.col; c++) {
+			for (r = 0; r < planetInfo.count.row; r++) {
+				number = arr[i];
+
+				var planetX = (r*(planetInfo.width+planetInfo.padding))+planetInfo.offset.left;
+				var planetY = (c*(planetInfo.height+planetInfo.padding))+planetInfo.offset.top;
+
+				newPlanetText = game.add.text(planetX, planetY, number, numberStyle);
+				game.physics.enable(newPlanetText, Phaser.Physics.ARCADE);
+				newPlanetText.body.immovable = true;
+				newPlanetText.anchor.set(0.5);
+
+				numbers.add(newPlanetText);
+
+				arrX[j] = planetX;
+				arrY[j] = planetY;
+
+				i++;
+				j++;
+			}
+		}
+	}
+
 	function initNumbers(num1,num2,ans,quiztext,signe,variable)
 	{
 		number1=num1;
@@ -668,160 +827,8 @@
 		}
 
 	}
-	function initSubNumbers() {
-			number1=Phaser.Math.between(20,40);
-			number2=Phaser.Math.between(1,20);
-			answer=number1-number2;
-			arr[posAnswer]=answer;
-			subQuizText = game.add.text(5, game.world.height-32, number1+' - '+ number2+' = ? ', textStyle);
-			subQuizText.visible=false;
-			planetInfo = {
-				width: 30,
-				height: 30,
-				count: {
-					row: 4,
-					col: 2,
-				},
-				offset: {
-					top: 30,
-					left: 150
-				},
-				padding: 80
-			}
-			numbers = game.add.group();
-			
-			for(i=0;i<posAnswer;i++){
-				arr[i]=Phaser.Math.between(1,20);
-			}
-			for(i=posAnswer+1;i<planetInfo.count.col*planetInfo.count.row;i++){
-				arr[i]=Phaser.Math.between(1,20);
-			}
-			i=0;
-			j=0;
-			
-			for(c=0; c<planetInfo.count.col; c++) {
-				for(r=0; r<planetInfo.count.row; r++) {
-					number=arr[i];
-					var planetX = (r*(planetInfo.width+planetInfo.padding))+planetInfo.offset.left;
-					var planetY = (c*(planetInfo.height+planetInfo.padding))+planetInfo.offset.top;
-					newPlanetText = game.add.text(planetX, planetY, number, numberStyle);
-					game.physics.enable(newPlanetText, Phaser.Physics.ARCADE);
-					newPlanetText.body.immovable = true;
-					newPlanetText.anchor.set(0.5);
-					numbers.add(newPlanetText);
-					arrX[j]=planetX;
-					arrY[j]=planetY;
-					i++;
-					j++;
-				}
-		}
-		
-		
-	}
-	function initMultiNumbers() {
-			/*number1=Phaser.Math.between(1,10);
-			var fact=Phaser.Math.between(1,10);
-			answer=number1*fact;
-			number2=answer/number1;
-			arr[posAnswer]=answer;*/
-			answer=Phaser.Math.between(1,100);
-			arr[posAnswer]=answer;
-			var ind=Phaser.Math.between(0,(getFactors(answer).length)-1);
-			number1=getFactors(answer)[ind];
-			number2=answer/number1;
-			multiQuizText = game.add.text(5, game.world.height-32, number1+' x '+ number2+' = ? ', textStyle);
-			multiQuizText.visible=false;
-			planetInfo = {
-				width: 30,
-				height: 30,
-				count: {
-					row: 4,
-					col: 2,
-				},
-				offset: {
-					top: 30,
-					left: 150
-				},
-				padding: 80
-			}
-			numbers = game.add.group();
-			
-			for(i=0;i<posAnswer;i++){
-				arr[i]=Phaser.Math.between(1,100);
-			}
-			for(i=posAnswer+1;i<planetInfo.count.col*planetInfo.count.row;i++){
-				arr[i]=Phaser.Math.between(1,100);
-			}
-			i=0;
-			j=0;
-			
-			for(c=0; c<planetInfo.count.col; c++) {
-				for(r=0; r<planetInfo.count.row; r++) {
-					number=arr[i];
-					var planetX = (r*(planetInfo.width+planetInfo.padding))+planetInfo.offset.left;
-					var planetY = (c*(planetInfo.height+planetInfo.padding))+planetInfo.offset.top;
-					newPlanetText = game.add.text(planetX, planetY, number, numberStyle);
-					game.physics.enable(newPlanetText, Phaser.Physics.ARCADE);
-					newPlanetText.body.immovable = true;
-					newPlanetText.anchor.set(0.5);
-					numbers.add(newPlanetText);
-					arrX[j]=planetX;
-					arrY[j]=planetY;
-					i++;
-					j++;
-				}
-		}
-	
-	}
-	function initDivNumbers() {
-			number1=Phaser.Math.between(1,100);
-			var ind=Phaser.Math.between(0,(getFactors(number1).length)-1);
-			number2=getFactors(number1)[ind];
-			answer=number1/number2;
-			arr[posAnswer]=answer;
-			divQuizText = game.add.text(5, game.world.height-32, number1+' / '+ number2+' = ? ', textStyle);
-			divQuizText.visible=false;
-			planetInfo = {
-				width: 30,
-				height: 30,
-				count: {
-					row: 4,
-					col: 2,
-				},
-				offset: {
-					top: 30,
-					left: 150
-				},
-				padding: 80
-			}
-			numbers = game.add.group();
-			
-			for(i=0;i<posAnswer;i++){
-				arr[i]=Phaser.Math.between(1,10);
-			}
-			for(i=posAnswer+1;i<planetInfo.count.col*planetInfo.count.row;i++){
-				arr[i]=Phaser.Math.between(1,10);
-			}
-			i=0;
-			j=0;
-			for(c=0; c<planetInfo.count.col; c++) {
-				for(r=0; r<planetInfo.count.row; r++) {
-					number=arr[i];
-					var planetX = (r*(planetInfo.width+planetInfo.padding))+planetInfo.offset.left;
-					var planetY = (c*(planetInfo.height+planetInfo.padding))+planetInfo.offset.top;
-					newPlanetText = game.add.text(planetX, planetY, number, numberStyle);
-					game.physics.enable(newPlanetText, Phaser.Physics.ARCADE);
-					newPlanetText.body.immovable = true;
-					newPlanetText.anchor.set(0.5);
-					numbers.add(newPlanetText);
-					arrX[j]=planetX;
-					arrY[j]=planetY;
-					i++;
-					j++;
-				}
-		}
-	
-	}
+
+
 	function keyboardUSe(){
 		if(playingAddition||playingSubstraction||playingMultiplication||playingDivision){
 			if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)){
