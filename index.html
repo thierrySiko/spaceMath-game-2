@@ -1022,7 +1022,7 @@
 			rocket.angle=0;
 
 			failureButton.visible=true;
-			game.time.events.add(Phaser.Timer.SECOND *1, failure, this);
+			game.time.events.add(Phaser.Timer.SECOND *1, onFailureButton, this);
 			lostAudio.play();
 		}
 
