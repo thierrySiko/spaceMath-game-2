@@ -998,7 +998,7 @@
 			}
 			successAudio.play();
 			successButton.visible=true;
-			game.time.events.add(Phaser.Timer.SECOND *1, success, this);
+			game.time.events.add(Phaser.Timer.SECOND *1, onSuccessButton, this);
 		}
 		else{
 			rocketLeaveScreen();
