@@ -1503,10 +1503,16 @@
 	}
 
 	function showMissionBriefing(callback) {
-		playingAddition=true;
-		playingSubstraction=true;
-		playingMultiplication=true;
-		playingDivision=true;
+		addButton.visible = false;
+		subButton.visible = false;
+		multiButton.visible = false;
+		divButton.visible = false;
+
+		playingAddition=false;
+		playingSubstraction=false;
+		playingMultiplication=false;
+		playingDivision=false;
+
 		var messages = [
 			"MISSION BRIEFING",
 			"You're an astronaut on a mission",
