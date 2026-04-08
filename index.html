@@ -1129,11 +1129,11 @@
 		var dance = floss.animations.add('dance');
 		floss.animations.play('dance', 5, true);
 
-		var replayBtn = game.add.button(game.world.centerX - 60, 285, 'winButton', restartGame, this);
+		var replayBtn = game.add.button(100, 60, 'winButton', restartGame, this);
 		replayBtn.anchor.set(0.5);
 		replayBtn.scale.setTo(0.85, 0.85);
 
-		var homeBtn = game.add.button(game.world.centerX + 60, 285, 'homeButton', goHome, this);
+		var homeBtn = game.add.button(500, 60, 'homeButton', goHome, this);
 		homeBtn.anchor.set(0.5);
 		homeBtn.scale.setTo(0.85, 0.85);
 	}
