@@ -496,7 +496,7 @@
 		subtitleText.anchor.set(0.5);
 
 		howToPlayText = game.add.text(game.world.centerX, 140,
-			'Move the rocket and hit the correct answer.\nAvoid enemy ships and wrong answers.',
+    	'Compute the coordinates\nFly to the correct planet\nAvoid asteroids',
 			{
 				font: '16px Arial',
 				fill: '#FFFFFF',
@@ -1199,41 +1199,43 @@
 	}
 
 	function startAddition() {
-		scoreIcon.visible=true;
-		scoreText.visible=true;
-		timeIcon.visible=true;
-		text.visible=true;
-		timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
+		showMissionBriefing(function () {
+			scoreIcon.visible=true;
+			scoreText.visible=true;
+			timeIcon.visible=true;
+			text.visible=true;
+			timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 
-		addButton.visible=false;;
-		subButton.visible=false;
-		multiButton.visible=false;
-		divButton.visible=false;
-		playingAddition = true;
-		initAddNumbers();
-		fond2.visible=true;
+			addButton.visible=false;;
+			subButton.visible=false;
+			multiButton.visible=false;
+			divButton.visible=false;
+			playingAddition = true;
+			initAddNumbers();
+			fond2.visible=true;
 
-		addQuizText.visible=true;
+			addQuizText.visible=true;
 
-		upButton.visible=true;
-		leftButton.visible=true;
-		rightButton.visible=true;
-		downButton.visible=true;
-		asteroid1.body.velocity.set(-80,-80);
-		pauseButton.visible=true;
-		homeButton.visible=true;
+			upButton.visible=true;
+			leftButton.visible=true;
+			rightButton.visible=true;
+			downButton.visible=true;
+			asteroid1.body.velocity.set(-80,-80);
+			pauseButton.visible=true;
+			homeButton.visible=true;
 
-		heart1.visible=true;
-		heart2.visible=true;
-		heart3.visible=true;
+			heart1.visible=true;
+			heart2.visible=true;
+			heart3.visible=true;
 
-		barScore.visible=true;
-		barQuiz.visible=true;
-		barLives.visible=true;
+			barScore.visible=true;
+			barQuiz.visible=true;
+			barLives.visible=true;
 
-		soundOnButton.visible = true;
-		soundOffButton.visible = true;
-		updateSoundButtons();
+			soundOnButton.visible = true;
+			soundOffButton.visible = true;
+			updateSoundButtons();
+		});
 
 	}
 	function startSubstraction() {
@@ -1474,12 +1476,77 @@
 	}
 
 	function updateTime() {
+    	Time++;
+    	text.setText(Time+'s');
+    }
 
-    Time++;
+	function showMissionBriefing(callback) {
+		var messages = [
+			"MISSION BRIEFING",
+			"Compute the planet coordinates",
+			"Reach the correct planet",
+			"Avoid asteroids",
+			"Launch in 3... 2... 1..."
+		];
 
-    text.setText(Time+'s');
+		var texts = [];
+		var startY = 80;
 
-}
+		var styleTitle = {
+			font: "bold 24px Arial",
+			fill: "#F39C12",
+			align: "center"
+		};
+
+		var styleText = {
+			font: "18px Arial",
+			fill: "#FFFFFF",
+			align: "center"
+		};
+
+		// fond sombre (optionnel)
+		var overlay = game.add.graphics(0, 0);
+		overlay.beginFill(0x000000, 0.8);
+		overlay.drawRect(0, 0, game.world.width, game.world.height);
+		overlay.endFill();
+
+		function showLine(index) {
+
+			if (index >= messages.length) {
+				// attendre un peu puis lancer le jeu
+				game.time.events.add(Phaser.Timer.SECOND * 1.5, function () {
+					overlay.destroy();
+					texts.forEach(t => t.destroy());
+					callback(); // démarre le jeu
+				});
+				return;
+			}
+
+			var style = index === 0 ? styleTitle : styleText;
+
+			var txt = game.add.text(
+				game.world.centerX,
+				startY + index * 40,
+				messages[index],
+				style
+			);
+
+			txt.anchor.set(0.5);
+			txt.alpha = 0;
+
+			texts.push(txt);
+
+			// animation fade-in
+			game.add.tween(txt).to({ alpha: 1 }, 500, Phaser.Easing.Linear.None, true);
+
+			// afficher la ligne suivante après délai
+			game.time.events.add(Phaser.Timer.SECOND * 1, function () {
+				showLine(index + 1);
+			});
+		}
+
+		showLine(0);
+	}
 </script>
 </body>
 </html>
