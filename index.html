@@ -1475,14 +1475,23 @@
 
 	}
 
-	function updateTime() {
-    	Time++;
-    	text.setText(Time+'s');
-    }
+    function updateTime() {
+		Time++;
+
+		var minutes = Math.floor(Time / 60);
+		var seconds = Time % 60;
+
+		var display =
+			(minutes < 10 ? "0" : "") + minutes + ":" +
+			(seconds < 10 ? "0" : "") + seconds;
+
+		text.setText(display);
+	}
 
 	function showMissionBriefing(callback) {
 		var messages = [
 			"MISSION BRIEFING",
+			"You're an astronaut on a mission",
 			"Compute the planet coordinates",
 			"Reach the correct planet",
 			"Avoid asteroids",
