@@ -1109,11 +1109,8 @@
 		});
 		winTitle.anchor.set(0.5);
 
-		var winScore = game.add.text(game.world.centerX, 95, 'Score: ' + score, {
-			font: '22px Arial',
-			fill: '#FFFFFF'
-		});
-		winScore.anchor.set(0.5);
+		var winScore = game.add.text(500, game.world.height-50, 'Score: ' + score, textStyle1);
+        winScore.anchor.set(0.5);
 
 		var minutes = Math.floor(Time / 60);
         var seconds = Time % 60;
@@ -1175,11 +1172,8 @@
 		});
 		loseTitle.anchor.set(0.5);
 
-		var loseScore = game.add.text(game.world.centerX, 120, 'Score: ' + score, {
-			font: '24px Arial',
-			fill: '#FFFFFF'
-		});
-		loseScore.anchor.set(0.5);
+		var loseScore = game.add.text(500, game.world.height-50, 'Score: ' + score, textStyle1);
+        loseScore.anchor.set(0.5);
 
 		var minutes = Math.floor(Time / 60);
         var seconds = Time % 60;
