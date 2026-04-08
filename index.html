@@ -330,7 +330,7 @@
 		scoreText.visible=false;
 		scoreIcon= game.add.sprite(0, 8, 'score');
 		scoreIcon.visible=false;
-		timeIcon= game.add.sprite(47, 8, 'timeIcon');
+		timeIcon= game.add.sprite(45, 8, 'timeIcon');
 		timeIcon.visible=false;
 		text = game.add.text(85, 20, '0s', textStyle);
 		text.anchor.setTo(0.5, 0.5);
@@ -415,7 +415,7 @@
 		scoreText.visible=false;
 		scoreIcon= game.add.sprite(0, 8, 'score');
 		scoreIcon.visible=false;
-		timeIcon= game.add.sprite(47, 8, 'timeIcon');
+		timeIcon= game.add.sprite(45, 8, 'timeIcon');
 		timeIcon.visible=false;
 		text = game.add.text(85, 20, '0s', textStyle);
 		text.anchor.setTo(0.5, 0.5);
@@ -1115,11 +1115,15 @@
 		});
 		winScore.anchor.set(0.5);
 
-		var winTime = game.add.text(game.world.centerX, 125, 'Time: ' + Time + 's', {
-			font: '22px Arial',
-			fill: '#FFFFFF'
-		});
-		winTime.anchor.set(0.5);
+		var minutes = Math.floor(Time / 60);
+        var seconds = Time % 60;
+
+        var display =
+            (minutes < 10 ? "0" : "") + minutes + ":" +
+            (seconds < 10 ? "0" : "") + seconds;
+
+        var winTime = game.add.text(100, game.world.height-50, display, textStyle1);
+        winTime.anchor.set(0.5);
 
 		var floss = game.add.sprite(game.world.centerX, 190, 'floss');
 		floss.anchor.set(0.5);
@@ -1177,11 +1181,15 @@
 		});
 		loseScore.anchor.set(0.5);
 
-		var loseTime = game.add.text(game.world.centerX, 155, 'Time: ' + Time + 's', {
-			font: '24px Arial',
-			fill: '#FFFFFF'
-		});
-		loseTime.anchor.set(0.5);
+		var minutes = Math.floor(Time / 60);
+        var seconds = Time % 60;
+
+        var display =
+            (minutes < 10 ? "0" : "") + minutes + ":" +
+            (seconds < 10 ? "0" : "") + seconds;
+
+        var loseTime = game.add.text(100, game.world.height-50, display, textStyle1);
+        loseTime.anchor.set(0.5);
 
 		var replayBtn = game.add.button(game.world.centerX, 230, 'lostButton', restartGame, this);
 		replayBtn.anchor.set(0.5);
@@ -1239,116 +1247,122 @@
 
 	}
 	function startSubstraction() {
-		scoreIcon.visible=true;
-		scoreText.visible=true;
-		timeIcon.visible=true;
-		text.visible=true;
-		timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
+		showMissionBriefing(function () {
+			scoreIcon.visible=true;
+			scoreText.visible=true;
+			timeIcon.visible=true;
+			text.visible=true;
+			timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 
-		addButton.destroy();
-		subButton.destroy();
-		multiButton.destroy();
-		divButton.destroy();
+			addButton.destroy();
+			subButton.destroy();
+			multiButton.destroy();
+			divButton.destroy();
 
-		playingSubstraction = true;
-		initSubNumbers();
-		fond3.visible=true;
+			playingSubstraction = true;
+			initSubNumbers();
+			fond3.visible=true;
 
-		subQuizText.visible=true;
+			subQuizText.visible=true;
 
-		upButton.visible=true;
-		leftButton.visible=true;
-		rightButton.visible=true;
-		downButton.visible=true;
-		asteroid1.body.velocity.set(-80,-80);
-		pauseButton.visible=true;
-		homeButton.visible=true;
+			upButton.visible=true;
+			leftButton.visible=true;
+			rightButton.visible=true;
+			downButton.visible=true;
+			asteroid1.body.velocity.set(-80,-80);
+			pauseButton.visible=true;
+			homeButton.visible=true;
 
-		heart1.visible=true;
-		heart2.visible=true;
-		heart3.visible=true;
+			heart1.visible=true;
+			heart2.visible=true;
+			heart3.visible=true;
 
-		barScore.visible=true;
-		barQuiz.visible=true;
-		barLives.visible=true;
+			barScore.visible=true;
+			barQuiz.visible=true;
+			barLives.visible=true;
 
-		soundOnButton.visible = true;
-		soundOffButton.visible = true;
-		updateSoundButtons();
+			soundOnButton.visible = true;
+			soundOffButton.visible = true;
+			updateSoundButtons();
+		});
 	}
 
 	function startMultiplication() {
-		scoreIcon.visible=true;
-		scoreText.visible=true;
-		timeIcon.visible=true;
-		text.visible=true;
-		timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
+		showMissionBriefing(function () {
+			scoreIcon.visible=true;
+			scoreText.visible=true;
+			timeIcon.visible=true;
+			text.visible=true;
+			timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 
-		addButton.destroy();
-		subButton.destroy();
-		multiButton.destroy();
-		divButton.destroy();
-		playingMultiplication = true;
-		initMultiNumbers();
-		fond4.visible=true;
+			addButton.destroy();
+			subButton.destroy();
+			multiButton.destroy();
+			divButton.destroy();
+			playingMultiplication = true;
+			initMultiNumbers();
+			fond4.visible=true;
 
-		multiQuizText.visible=true;
+			multiQuizText.visible=true;
 
-		upButton.visible=true;
-		leftButton.visible=true;
-		rightButton.visible=true;
-		downButton.visible=true;
-		asteroid1.body.velocity.set(-80,-80);
-		pauseButton.visible=true;
-		homeButton.visible=true;
+			upButton.visible=true;
+			leftButton.visible=true;
+			rightButton.visible=true;
+			downButton.visible=true;
+			asteroid1.body.velocity.set(-80,-80);
+			pauseButton.visible=true;
+			homeButton.visible=true;
 
-		heart1.visible=true;
-		heart2.visible=true;
-		heart3.visible=true;
+			heart1.visible=true;
+			heart2.visible=true;
+			heart3.visible=true;
 
-		barScore.visible=true;
-		barQuiz.visible=true;
-		barLives.visible=true;
+			barScore.visible=true;
+			barQuiz.visible=true;
+			barLives.visible=true;
 
-		soundOnButton.visible = true;
-		soundOffButton.visible = true;
-		updateSoundButtons();
+			soundOnButton.visible = true;
+			soundOffButton.visible = true;
+			updateSoundButtons();
+		});
 	}
 
 	function startDivision() {
-		scoreIcon.visible=true;
-		scoreText.visible=true;
-		timeIcon.visible=true;
-		text.visible=true;
-		timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
+		showMissionBriefing(function () {
+			scoreIcon.visible=true;
+			scoreText.visible=true;
+			timeIcon.visible=true;
+			text.visible=true;
+			timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 
-		addButton.destroy();
-		subButton.destroy();
-		multiButton.destroy();
-		divButton.destroy();
-		playingDivision = true;
-		initDivNumbers()
-		fond5.visible=true;
-		divQuizText.visible=true;
-		upButton.visible=true;
-		leftButton.visible=true;
-		rightButton.visible=true;
-		downButton.visible=true;
-		asteroid1.body.velocity.set(-80,-80);
-		pauseButton.visible=true;
-		homeButton.visible=true;
+			addButton.destroy();
+			subButton.destroy();
+			multiButton.destroy();
+			divButton.destroy();
+			playingDivision = true;
+			initDivNumbers()
+			fond5.visible=true;
+			divQuizText.visible=true;
+			upButton.visible=true;
+			leftButton.visible=true;
+			rightButton.visible=true;
+			downButton.visible=true;
+			asteroid1.body.velocity.set(-80,-80);
+			pauseButton.visible=true;
+			homeButton.visible=true;
 
-		heart1.visible=true;
-		heart2.visible=true;
-		heart3.visible=true;
+			heart1.visible=true;
+			heart2.visible=true;
+			heart3.visible=true;
 
-		barScore.visible=true;
-		barQuiz.visible=true;
-		barLives.visible=true;
+			barScore.visible=true;
+			barQuiz.visible=true;
+			barLives.visible=true;
 
-		soundOnButton.visible = true;
-		soundOffButton.visible = true;
-		updateSoundButtons();
+			soundOnButton.visible = true;
+			soundOffButton.visible = true;
+			updateSoundButtons();
+		});
 	}
 
 	function getFactors(n){
@@ -1489,6 +1503,10 @@
 	}
 
 	function showMissionBriefing(callback) {
+		playingAddition=true;
+		playingSubstraction=true;
+		playingMultiplication=true;
+		playingDivision=true;
 		var messages = [
 			"MISSION BRIEFING",
 			"You're an astronaut on a mission",
