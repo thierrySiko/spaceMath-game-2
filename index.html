@@ -362,31 +362,31 @@
 		divButton.anchor.set(0.5);
 		divButton.visible=false;
 
-		homeButton = game.add.button(20, game.world.height-90, 'homeButton', homeButton, this);
+		homeButton = game.add.button(20, game.world.height-90, 'homeButton', onHomeButton, this);
 		homeButton.anchor.set(0.5);
 		homeButton.visible=false;
 
-		pauseButton = game.add.button(20, game.world.height-50, 'pauseButton', pauseButton, this);
+		pauseButton = game.add.button(20, game.world.height-50, 'pauseButton', onPauseButton, this);
 		pauseButton.anchor.set(0.5);
 		pauseButton.visible=false;
 
-		playButton = game.add.button(20, game.world.height-50, 'playButton', playButton, this);
+		playButton = game.add.button(20, game.world.height-50, 'playButton', onPlayButton, this);
 		playButton.anchor.set(0.5);
 		playButton.visible=false;
 
-		soundOffButton = game.add.button(20, game.world.height-125, 'soundOffButton', soundOffButton, this);
+		soundOffButton = game.add.button(20, game.world.height-125, 'soundOffButton', onSoundOffButton, this);
 		soundOffButton.anchor.set(0.5);
 		soundOffButton.visible=false;
 
-		soundOnButton = game.add.button(20, game.world.height-125, 'soundOnButton', soundOnButton, this);
+		soundOnButton = game.add.button(20, game.world.height-125, 'soundOnButton', onSoundOnButton, this);
 		soundOnButton.anchor.set(0.5);
 
 
-		successButton = game.add.button(game.world.width/2, game.world.height/2, 'successButton', successButton, this);
+		successButton = game.add.button(game.world.width/2, game.world.height/2, 'successButton', onSuccessButton, this);
 		successButton.anchor.set(0.5);
 		successButton.visible=false;
 
-		failureButton = game.add.button(game.world.width/2, game.world.height/2, 'failureButton', failureButton, this);
+		failureButton = game.add.button(game.world.width/2, game.world.height/2, 'failureButton', onFailureButton, this);
 		failureButton.anchor.set(0.5);
 		failureButton.visible=false;
 
@@ -429,6 +429,27 @@
 	}
 
 	function showMenu() {
+		if (numbers) {
+			numbers.destroy();
+			numbers = null;
+		}
+		if (addQuizText) {
+			addQuizText.destroy();
+			addQuizText = null;
+		}
+		if (subQuizText) {
+			subQuizText.destroy();
+			subQuizText = null;
+		}
+		if (multiQuizText) {
+			multiQuizText.destroy();
+			multiQuizText = null;
+		}
+		if (divQuizText) {
+			divQuizText.destroy();
+			divQuizText = null;
+		}
+
 		hideGameUI();
 
 		fond1.visible = true;
@@ -440,6 +461,9 @@
 
 		rocket.visible = false;
 		asteroid1.visible = false;
+		rocket.body.velocity.set(0, 0);
+		asteroid1.body.velocity.set(0, 0);
+
 		planet1.visible = false;
 		planet2.visible = false;
 		planet3.visible = false;
@@ -498,6 +522,9 @@
 		copyText.visible = false;
 		rocket.visible = true;
 		asteroid1.visible = true;
+		rocket.body.velocity.set(0, 0);
+		asteroid1.body.velocity.set(0, 0);
+
 		planet1.visible = true;
 		planet2.visible = true;
 		planet3.visible = true;
@@ -1344,11 +1371,11 @@
 		startButton.visible=true;
 	}
 
-	function homeButton(){
+	function onHomeButton(){
 		location.reload();
 
 	}
-	function pauseButton(){
+	function onPauseButton(){
 		pause=true;
 		playingAddition=false;
 		playingSubstraction=false;
@@ -1361,20 +1388,20 @@
 		game.time.events.remove(timerEvents);
 
 	}
-		function playButton(){
-			playingAddition=true;
-			playingSubstraction=true;
-			playingMultiplication=true;
-			playingDivision=true;
-			pause=false;
-			rocket.body.velocity.set(0,0);
-			asteroid1.body.velocity.set(80, -80);
-			playButton.visible=false;
-			pauseButton.visible=true;
-			timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
+	function onPlayButton(){
+		playingAddition=true;
+		playingSubstraction=true;
+		playingMultiplication=true;
+		playingDivision=true;
+		pause=false;
+		rocket.body.velocity.set(0,0);
+		asteroid1.body.velocity.set(80, -80);
+		playButton.visible=false;
+		pauseButton.visible=true;
+		timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 	}
 
-	function soundOffButton() {
+	function onSoundOffButton() {
 
 		soundMuted = false;
 
@@ -1389,7 +1416,7 @@
 		updateSoundButtons();
 	}
 
-	function soundOnButton() {
+	function onSoundOnButton() {
 
 		soundMuted = true;
 
@@ -1414,14 +1441,14 @@
 		}
 	}
 
-	function success(){
-
+	function onSuccessButton(){
 		successButton.visible=false;
 	}
-	function failure(){
 
+	function onFailureButton(){
 		failureButton.visible=false;
 	}
+
 	function lost(){
 		location.reload();
 	}
