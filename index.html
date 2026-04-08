@@ -427,13 +427,15 @@
 		fondWin= game.add.sprite(0, 0, 'fondWin');
 		fondWin.visible=false;
 		//copyText = game.add.text(450, 300, 'By SIKO Thierry', textStyle);
-		copyText = game.add.text(game.world.centerX + 10, game.world.height - 20, 'By SIKO Thierry', textStyle);
+
+		copyText = game.add.text(game.world.centerX + 100, game.world.height - 20, 'By SIKO Thierry', textStyle);
 		copyText.anchor.set(0.5);
-		showMenu();
 
 		levelText = game.add.text(game.world.centerX, 8, 'Level: 1', textStyle);
 		levelText.anchor.set(0.5);
 		levelText.visible = false;
+
+		showMenu();
 
 	}
 
@@ -1115,7 +1117,7 @@
 		scoreIcon.visible = false;
 		timeIcon.visible = false;
 		text.visible = false;
-		levelText.visible = false;
+		if (levelText) levelText.visible = false;
 
 		heart1.visible = false;
 		heart2.visible = false;
@@ -1591,11 +1593,11 @@
 		rocket.body.velocity.set(-30,0);
 		
 	}
-	
+
 	function updateTime() {
 		Time++;
-		text.setText(Time+'s');
-		levelText.setText('Level: ' + level);
+		if (text) text.setText(Time + 's');
+		if (levelText) levelText.setText('Level: ' + level);
 	}
 </script>
 </body>
