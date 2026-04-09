@@ -489,7 +489,7 @@
 		});
 		titleText.anchor.set(0.5);
 
-		subtitleText = game.add.text(game.world.centerX, 95, 'Arcade Math Game', {
+		subtitleText = game.add.text(game.world.centerX, 95, 'Space Mission Math Game', {
 			font: '18px Arial',
 			fill: '#F1C40F'
 		});
@@ -860,22 +860,22 @@
 			if(game.input.keyboard.isDown(Phaser.Keyboard.LEFT)){
 				rocket.body.velocity.set(-80,0);
 				rocket.angle=-90;
-				keyPressAudio.play();
+				//keyPressAudio.play();
 			}
 			else if(game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)){
 				rocket.body.velocity.set(80,0);
 				rocket.angle=90;
-				keyPressAudio.play();
+				//keyPressAudio.play();
 			}
 			else if(game.input.keyboard.isDown(Phaser.Keyboard.UP)){
 				rocket.body.velocity.set(0,-80);
 				rocket.angle=0;
-				keyPressAudio.play();
+				//keyPressAudio.play();
 			}
 			else if(game.input.keyboard.isDown(Phaser.Keyboard.DOWN)){
 				rocket.body.velocity.set(0,80);
 				rocket.angle=180;
-				keyPressAudio.play();
+				//keyPressAudio.play();
 			}
 			else{
 				//rocket.angle=0;
@@ -1101,6 +1101,14 @@
 		planet7.visible = false;
 		planet8.visible = false;
 
+		var winTitle = game.add.text(game.world.centerX, 60, 'MISSION COMPLETE', {
+			font: 'bold 28px Arial',
+			fill: '#2ECC71',
+			stroke: '#000000',
+			strokeThickness: 4
+		});
+		winTitle.anchor.set(0.5);
+
 		var winScore = game.add.text(500, game.world.height-50, 'Score: ' + score, textStyle1);
         winScore.anchor.set(0.5);
 
@@ -1159,13 +1167,6 @@
 
 		var loseScore = game.add.text(500, game.world.height-50, 'Score: ' + score, textStyle1);
         loseScore.anchor.set(0.5);
-
-		var minutes = Math.floor(Time / 60);
-        var seconds = Time % 60;
-
-        var display =
-            (minutes < 10 ? "0" : "") + minutes + ":" +
-            (seconds < 10 ? "0" : "") + seconds;
 
         var loseTime = game.add.text(100, game.world.height-50, 'Time: ' + formatTime(Time), textStyle1);
         loseTime.anchor.set(0.5);
