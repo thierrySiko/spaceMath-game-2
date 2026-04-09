@@ -1104,7 +1104,6 @@
 		var winScore = game.add.text(500, game.world.height-50, 'Score: ' + score, textStyle1);
         winScore.anchor.set(0.5);
 
-        //var winTime = game.add.text(100, game.world.height-50, display, textStyle1);
         var winTime = game.add.text(100, game.world.height-50, 'Time: ' + formatTime(Time), textStyle1);
         winTime.anchor.set(0.5);
 
@@ -1168,7 +1167,6 @@
             (minutes < 10 ? "0" : "") + minutes + ":" +
             (seconds < 10 ? "0" : "") + seconds;
 
-        //var loseTime = game.add.text(100, game.world.height-50, display, textStyle1);
         var loseTime = game.add.text(100, game.world.height-50, 'Time: ' + formatTime(Time), textStyle1);
         loseTime.anchor.set(0.5);
 
@@ -1180,11 +1178,16 @@
 	}
 
 	function restartGame() {
-		location.reload();
+		resetGameState();
+
+		// retourne au choix du mode
+		openModeSelection();
 	}
 
 	function goHome() {
-		location.reload();
+		resetGameState();
+
+		showMenu();
 	}
 
 	function startAddition() {
@@ -1501,11 +1504,6 @@
 		multiButton.visible = false;
 		divButton.visible = false;
 
-		playingAddition=false;
-		playingSubstraction=false;
-		playingMultiplication=false;
-		playingDivision=false;
-
 		var messages = [
 			"MISSION BRIEFING",
 			"You're an astronaut on a mission",
@@ -1572,6 +1570,48 @@
 		}
 
 		showLine(0);
+	}
+
+	function resetGameState() {
+		// reset score / vie / temps
+		score = 0;
+		lives = 3;
+		Time = 0;
+
+		// reset UI
+		scoreText.setText('0');
+		text.setText('00:00');
+
+		// reset rocket
+		rocket.reset(game.world.width * 0.5, game.world.height - 20);
+		rocket.body.velocity.set(0, 0);
+		rocket.angle = 0;
+
+		// reset asteroid
+		asteroid1.reset(game.world.width, game.world.height / 2);
+		asteroid1.body.velocity.set(0, 0);
+
+		// reset vies
+		heart1.visible = true;
+		heart2.visible = true;
+		heart3.visible = true;
+
+		// reset timer
+		if (timerEvents) {
+			game.time.events.remove(timerEvents);
+		}
+
+		// reset modes
+		playingAddition = false;
+		playingSubstraction = false;
+		playingMultiplication = false;
+		playingDivision = false;
+
+		// nettoyer les nombres
+		if (numbers) {
+			numbers.destroy();
+			numbers = null;
+		}
 	}
 </script>
 </body>
