@@ -128,8 +128,6 @@
 	var howToPlayText;
 	var homeMenuButton;
 
-	var endScreenGroup;
-
 	textStyle = { font: 'bold 18px Arial', fill: '#F39C12' };
 	textStyle1 = { font: 'bold 30px Arial', fill: '#8A2B56' };
 	var numberStyle= { font: 'bold 15px Arial', fill: '#F0F3F4' };
@@ -426,16 +424,11 @@
 		fondWin.visible=false;
 		copyText = game.add.text(game.world.centerX + 150, game.world.height - 20, 'By SIKO Thierry', textStyle);
 		copyText.anchor.set(0.5);
-		endScreenGroup = game.add.group();
 		showMenu();
 
 	}
 
 	function showMenu() {
-		if (endScreenGroup) {
-			endScreenGroup.removeAll(true);
-		}
-
 		if (numbers) {
 			numbers.destroy();
 			numbers = null;
@@ -1089,10 +1082,6 @@
 	function showWinScreen() {
 		hideGameUI();
 
-		if (endScreenGroup) {
-			endScreenGroup.removeAll(true);
-		}
-
 		fond1.visible = false;
 		fond2.visible = false;
 		fond3.visible = false;
@@ -1113,37 +1102,29 @@
 		planet8.visible = false;
 
 		var winScore = game.add.text(500, game.world.height-50, 'Score: ' + score, textStyle1);
-		winScore.anchor.set(0.5);
-		endScreenGroup.add(winScore);
+        winScore.anchor.set(0.5);
 
-		var winTime = game.add.text(100, game.world.height-50, 'Time: ' + formatTime(Time), textStyle1);
-		winTime.anchor.set(0.5);
-		endScreenGroup.add(winTime);
+        var winTime = game.add.text(100, game.world.height-50, 'Time: ' + formatTime(Time), textStyle1);
+        winTime.anchor.set(0.5);
 
 		var floss = game.add.sprite(game.world.centerX, 190, 'floss');
 		floss.anchor.set(0.5);
 		floss.scale.setTo(0.45, 0.45);
+
 		var dance = floss.animations.add('dance');
 		floss.animations.play('dance', 5, true);
-		endScreenGroup.add(floss);
 
 		var replayBtn = game.add.button(100, 60, 'winButton', restartGame, this);
 		replayBtn.anchor.set(0.5);
 		replayBtn.scale.setTo(0.85, 0.85);
-		endScreenGroup.add(replayBtn);
 
 		var homeBtn = game.add.button(500, 60, 'homeButton', goHome, this);
 		homeBtn.anchor.set(0.5);
 		homeBtn.scale.setTo(0.85, 0.85);
-		endScreenGroup.add(homeBtn);
 	}
 
 	function showLoseScreen() {
 		hideGameUI();
-
-		if (endScreenGroup) {
-			endScreenGroup.removeAll(true);
-		}
 
 		fond1.visible = false;
 		fond2.visible = false;
@@ -1153,11 +1134,8 @@
 		fondWin.visible = false;
 
 		fondLost = game.add.sprite(0, 0, 'fondLost');
-		endScreenGroup.add(fondLost);
-
 		fondLost1 = game.add.sprite(game.world.centerX, game.world.centerY, 'fondLost1');
 		fondLost1.anchor.set(0.5);
-		endScreenGroup.add(fondLost1);
 
 		rocket.visible = false;
 		asteroid1.visible = false;
@@ -1178,36 +1156,33 @@
 			strokeThickness: 4
 		});
 		loseTitle.anchor.set(0.5);
-		endScreenGroup.add(loseTitle);
 
 		var loseScore = game.add.text(500, game.world.height-50, 'Score: ' + score, textStyle1);
-		loseScore.anchor.set(0.5);
-		endScreenGroup.add(loseScore);
+        loseScore.anchor.set(0.5);
 
-		var loseTime = game.add.text(100, game.world.height-50, 'Time: ' + formatTime(Time), textStyle1);
-		loseTime.anchor.set(0.5);
-		endScreenGroup.add(loseTime);
+		var minutes = Math.floor(Time / 60);
+        var seconds = Time % 60;
+
+        var display =
+            (minutes < 10 ? "0" : "") + minutes + ":" +
+            (seconds < 10 ? "0" : "") + seconds;
+
+        var loseTime = game.add.text(100, game.world.height-50, 'Time: ' + formatTime(Time), textStyle1);
+        loseTime.anchor.set(0.5);
 
 		var replayBtn = game.add.button(100, 60, 'lostButton', restartGame, this);
 		replayBtn.anchor.set(0.5);
-		endScreenGroup.add(replayBtn);
 
 		var homeBtn = game.add.button(500, 60, 'homeButton', goHome, this);
 		homeBtn.anchor.set(0.5);
-		endScreenGroup.add(homeBtn);
 	}
 
 	function restartGame() {
-		resetGameState();
-
-		// retourne au choix du mode
-		openModeSelection();
+		location.reload();
 	}
 
 	function goHome() {
-		resetGameState();
-
-		showMenu();
+		location.reload();
 	}
 
 	function startAddition() {
@@ -1592,53 +1567,6 @@
 		showLine(0);
 	}
 
-	function resetGameState() {
-		// reset score / vie / temps
-		score = 0;
-		lives = 3;
-		Time = 0;
-
-		// reset UI
-		scoreText.setText('0');
-		text.setText('00:00');
-
-		// reset rocket
-		rocket.reset(game.world.width * 0.5, game.world.height - 20);
-		rocket.body.velocity.set(0, 0);
-		rocket.angle = 0;
-
-		// reset asteroid
-		asteroid1.reset(game.world.width, game.world.height / 2);
-		asteroid1.body.velocity.set(0, 0);
-
-		// reset vies
-		heart1.visible = true;
-		heart2.visible = true;
-		heart3.visible = true;
-
-		// reset timer
-		if (timerEvents) {
-			game.time.events.remove(timerEvents);
-		}
-
-		// reset modes
-		playingAddition = false;
-		playingSubstraction = false;
-		playingMultiplication = false;
-		playingDivision = false;
-
-		// nettoyer les nombres
-		if (numbers) {
-			numbers.destroy();
-			numbers = null;
-		}
-
-		if (endScreenGroup) {
-			endScreenGroup.removeAll(true);
-		}
-
-		fondWin.visible = false;
-	}
 </script>
 </body>
 </html>
