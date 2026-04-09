@@ -1045,7 +1045,6 @@
 		openModeSelection();
 	}
 
-
 	function hideGameUI() {
 		upButton.visible = false;
 		leftButton.visible = false;
@@ -1055,7 +1054,8 @@
 		pauseButton.visible = false;
 		playButton.visible = false;
 		homeButton.visible = false;
-		updateSoundButtons();
+		soundOnButton.visible = false;
+		soundOffButton.visible = false;
 
 		successButton.visible = false;
 		failureButton.visible = false;
@@ -1104,14 +1104,8 @@
 		var winScore = game.add.text(500, game.world.height-50, 'Score: ' + score, textStyle1);
         winScore.anchor.set(0.5);
 
-		var minutes = Math.floor(Time / 60);
-        var seconds = Time % 60;
-
-        var display =
-            (minutes < 10 ? "0" : "") + minutes + ":" +
-            (seconds < 10 ? "0" : "") + seconds;
-
-        var winTime = game.add.text(100, game.world.height-50, display, textStyle1);
+        //var winTime = game.add.text(100, game.world.height-50, display, textStyle1);
+        var winTime = game.add.text(100, game.world.height-50, 'Time: ' + formatTime(Time), textStyle1);
         winTime.anchor.set(0.5);
 
 		var floss = game.add.sprite(game.world.centerX, 190, 'floss');
@@ -1174,7 +1168,8 @@
             (minutes < 10 ? "0" : "") + minutes + ":" +
             (seconds < 10 ? "0" : "") + seconds;
 
-        var loseTime = game.add.text(100, game.world.height-50, display, textStyle1);
+        //var loseTime = game.add.text(100, game.world.height-50, display, textStyle1);
+        var loseTime = game.add.text(100, game.world.height-50, 'Time: ' + formatTime(Time), textStyle1);
         loseTime.anchor.set(0.5);
 
 		var replayBtn = game.add.button(100, 60, 'lostButton', restartGame, this);
@@ -1194,44 +1189,49 @@
 
 	function startAddition() {
 		showMissionBriefing(function () {
-			scoreIcon.visible=true;
-			scoreText.visible=true;
-			timeIcon.visible=true;
-			text.visible=true;
-			timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
+			scoreIcon.visible = true;
+			scoreText.visible = true;
+			timeIcon.visible = true;
+			text.visible = true;
+			timerEvents = game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 
-			addButton.visible=false;;
-			subButton.visible=false;
-			multiButton.visible=false;
-			divButton.visible=false;
+			addButton.visible = false;
+			subButton.visible = false;
+			multiButton.visible = false;
+			divButton.visible = false;
+
 			playingAddition = true;
+			playingSubstraction = false;
+			playingMultiplication = false;
+			playingDivision = false;
+
 			initAddNumbers();
-			fond2.visible=true;
+			fond2.visible = true;
+			addQuizText.visible = true;
 
-			addQuizText.visible=true;
-
-			upButton.visible=true;
-			leftButton.visible=true;
-			rightButton.visible=true;
-			downButton.visible=true;
+			upButton.visible = true;
+			leftButton.visible = true;
+			rightButton.visible = true;
+			downButton.visible = true;
 			asteroid1.body.velocity.set(-80,-80);
-			pauseButton.visible=true;
-			homeButton.visible=true;
 
-			heart1.visible=true;
-			heart2.visible=true;
-			heart3.visible=true;
+			pauseButton.visible = true;
+			homeButton.visible = true;
 
-			barScore.visible=true;
-			barQuiz.visible=true;
-			barLives.visible=true;
+			heart1.visible = true;
+			heart2.visible = true;
+			heart3.visible = true;
+
+			barScore.visible = true;
+			barQuiz.visible = true;
+			barLives.visible = true;
 
 			soundOnButton.visible = true;
 			soundOffButton.visible = true;
 			updateSoundButtons();
 		});
-
 	}
+
 	function startSubstraction() {
 		showMissionBriefing(function () {
 			scoreIcon.visible=true;
@@ -1240,12 +1240,16 @@
 			text.visible=true;
 			timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 
-			addButton.destroy();
-			subButton.destroy();
-			multiButton.destroy();
-			divButton.destroy();
+			addButton.visible = false;
+			subButton.visible = false;
+			multiButton.visible = false;
+			divButton.visible = false;
 
+			playingAddition = false;
 			playingSubstraction = true;
+			playingMultiplication = false;
+			playingDivision = false;
+
 			initSubNumbers();
 			fond3.visible=true;
 
@@ -1281,11 +1285,16 @@
 			text.visible=true;
 			timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 
-			addButton.destroy();
-			subButton.destroy();
-			multiButton.destroy();
-			divButton.destroy();
+			addButton.visible = false;
+			subButton.visible = false;
+			multiButton.visible = false;
+			divButton.visible = false;
+
+			playingAddition = false;
+			playingSubstraction = false;
 			playingMultiplication = true;
+			playingDivision = false;
+
 			initMultiNumbers();
 			fond4.visible=true;
 
@@ -1321,11 +1330,16 @@
 			text.visible=true;
 			timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 
-			addButton.destroy();
-			subButton.destroy();
-			multiButton.destroy();
-			divButton.destroy();
+			addButton.visible = false;
+			subButton.visible = false;
+			multiButton.visible = false;
+			divButton.visible = false;
+
+			playingAddition = false;
+			playingSubstraction = false;
+			playingMultiplication = false;
 			playingDivision = true;
+
 			initDivNumbers()
 			fond5.visible=true;
 			divQuizText.visible=true;
@@ -1377,30 +1391,23 @@
 		location.reload();
 
 	}
+
 	function onPauseButton(){
-		pause=true;
-		playingAddition=false;
-		playingSubstraction=false;
-		playingMultiplication=false;
-		playingDivision=false;
+		pause = true;
 		rocket.body.velocity.set(0,0);
 		asteroid1.body.velocity.set(0,0);
-		pauseButton.visible=false;
-		playButton.visible=true;
+		pauseButton.visible = false;
+		playButton.visible = true;
 		game.time.events.remove(timerEvents);
-
 	}
+
 	function onPlayButton(){
-		playingAddition=true;
-		playingSubstraction=true;
-		playingMultiplication=true;
-		playingDivision=true;
-		pause=false;
+		pause = false;
 		rocket.body.velocity.set(0,0);
-		asteroid1.body.velocity.set(80, -80);
-		playButton.visible=false;
-		pauseButton.visible=true;
-		timerEvents=game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
+		asteroid1.body.velocity.set(-80, -80);
+		playButton.visible = false;
+		pauseButton.visible = true;
+		timerEvents = game.time.events.loop(Phaser.Timer.SECOND, updateTime, this);
 	}
 
 	function onSoundOffButton() {
@@ -1475,17 +1482,17 @@
 
 	}
 
-    function updateTime() {
+	function formatTime(totalSeconds) {
+		var minutes = Math.floor(totalSeconds / 60);
+		var seconds = totalSeconds % 60;
+
+		return (minutes < 10 ? "0" : "") + minutes + ":" +
+			   (seconds < 10 ? "0" : "") + seconds;
+	}
+
+	function updateTime() {
 		Time++;
-
-		var minutes = Math.floor(Time / 60);
-		var seconds = Time % 60;
-
-		var display =
-			(minutes < 10 ? "0" : "") + minutes + ":" +
-			(seconds < 10 ? "0" : "") + seconds;
-
-		text.setText(display);
+		text.setText(formatTime(Time));
 	}
 
 	function showMissionBriefing(callback) {
