@@ -906,7 +906,8 @@
 
 	function rocketHitNumber(rocket, number) {
 		var killTween = game.add.tween(number.scale);
-		if((rocket.x>arrX[posAnswer]-30)&&(rocket.x<arrX[posAnswer]+30)&&(rocket.y>arrY[posAnswer]-30)&&(rocket.y<arrY[posAnswer]+30)){
+
+		if (number.answerValue === arr[posAnswer]) {
 		killTween.to({x:0,y:0}, 100, Phaser.Easing.Linear.None);
 		killTween.onComplete.addOnce(function(){
 			//planetText.kill();
@@ -1557,6 +1558,7 @@
 	function createNumberBitmap(x, y, value) {
 		var txt = game.add.bitmapText(x, y, 'numbersFont', value.toString(), 28);
 		txt.anchor.set(0.5);
+		txt.answerValue = value;
 		game.physics.enable(txt, Phaser.Physics.ARCADE);
 		txt.body.immovable = true;
 		return txt;
