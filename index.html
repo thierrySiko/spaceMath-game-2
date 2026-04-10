@@ -202,6 +202,8 @@
 
 		game.load.spritesheet('floss', 'medias/img/image/floss1.png', 184.75, 297, 10);
 
+		game.load.bitmapFont('numbersFont', 'medias/fonts/numbers.png', 'medias/fonts/numbers.xml');
+
 	}
 	function create() {
 		backgroundAudio = game.add.audio('backgroundAudio');
@@ -643,11 +645,7 @@
 				var planetX = (r*(planetInfo.width+planetInfo.padding))+planetInfo.offset.left;
 				var planetY = (c*(planetInfo.height+planetInfo.padding))+planetInfo.offset.top;
 
-				newPlanetText = game.add.text(planetX, planetY, number, numberStyle);
-				game.physics.enable(newPlanetText, Phaser.Physics.ARCADE);
-				newPlanetText.body.immovable = true;
-				newPlanetText.anchor.set(0.5);
-
+				newPlanetText = createNumberBitmap(planetX, planetY, number);
 				numbers.add(newPlanetText);
 
 				arrX[j] = planetX;
@@ -690,11 +688,7 @@
 				var planetX = (r*(planetInfo.width+planetInfo.padding))+planetInfo.offset.left;
 				var planetY = (c*(planetInfo.height+planetInfo.padding))+planetInfo.offset.top;
 
-				newPlanetText = game.add.text(planetX, planetY, number, numberStyle);
-				game.physics.enable(newPlanetText, Phaser.Physics.ARCADE);
-				newPlanetText.body.immovable = true;
-				newPlanetText.anchor.set(0.5);
-
+				newPlanetText = createNumberBitmap(planetX, planetY, number);
 				numbers.add(newPlanetText);
 
 				arrX[j] = planetX;
@@ -739,11 +733,7 @@
 				var planetX = (r*(planetInfo.width+planetInfo.padding))+planetInfo.offset.left;
 				var planetY = (c*(planetInfo.height+planetInfo.padding))+planetInfo.offset.top;
 
-				newPlanetText = game.add.text(planetX, planetY, number, numberStyle);
-				game.physics.enable(newPlanetText, Phaser.Physics.ARCADE);
-				newPlanetText.body.immovable = true;
-				newPlanetText.anchor.set(0.5);
-
+				newPlanetText = createNumberBitmap(planetX, planetY, number);
 				numbers.add(newPlanetText);
 
 				arrX[j] = planetX;
@@ -788,11 +778,7 @@
 				var planetX = (r*(planetInfo.width+planetInfo.padding))+planetInfo.offset.left;
 				var planetY = (c*(planetInfo.height+planetInfo.padding))+planetInfo.offset.top;
 
-				newPlanetText = game.add.text(planetX, planetY, number, numberStyle);
-				game.physics.enable(newPlanetText, Phaser.Physics.ARCADE);
-				newPlanetText.body.immovable = true;
-				newPlanetText.anchor.set(0.5);
-
+				newPlanetText = createNumberBitmap(planetX, planetY, number);
 				numbers.add(newPlanetText);
 
 				arrX[j] = planetX;
@@ -1566,6 +1552,14 @@
 		}
 
 		showLine(0);
+	}
+
+	function createNumberBitmap(x, y, value) {
+		var txt = game.add.bitmapText(x, y, 'numbersFont', value.toString(), 28);
+		txt.anchor.set(0.5);
+		game.physics.enable(txt, Phaser.Physics.ARCADE);
+		txt.body.immovable = true;
+		return txt;
 	}
 
 </script>
