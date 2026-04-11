@@ -504,6 +504,7 @@
 
 		playMenuButton = game.add.button(game.world.centerX, 235, 'startButton', openModeSelection, this);
 		playMenuButton.anchor.set(0.5);
+		playMenuButton.scale.set(0.55);
 
 		copyText.visible = true;
 
@@ -1563,13 +1564,12 @@
 
 	function showAnimatedLogo() {
 		var centerX = game.world.centerX;
-		var centerY = game.world.centerY - 120;
+		var centerY = 70;
 
-		// logo
 		var logo = game.add.sprite(centerX, centerY, 'logo');
 		logo.anchor.set(0.5);
 		logo.alpha = 0;
-		logo.scale.set(0.05);
+		logo.scale.set(0.28);
 
 		game.add.tween(logo).to(
 			{ alpha: 1 },
@@ -1579,120 +1579,20 @@
 		);
 
 		game.add.tween(logo.scale).to(
-			{ x: 1, y: 1 },
+			{ x: 0.3, y: 0.3 },
 			900,
 			Phaser.Easing.Back.Out,
 			true
 		);
 
-		// groupe orbite
-		var orbitGroup = game.add.group();
-		orbitGroup.x = centerX;
-		orbitGroup.y = centerY;
-		orbitGroup.alpha = 0;
-
-		var orbit = game.add.graphics(0, 0);
-		orbit.lineStyle(4, 0x4FC3F7, 0.9);
-		orbit.drawEllipse(0, 0, 380, 120);
-		orbitGroup.add(orbit);
-
-		game.add.tween(orbitGroup).to(
-			{ alpha: 1 },
-			700,
-			Phaser.Easing.Linear.None,
-			true,
-			300
-		);
-
-		// petite fusée en orbite
-		var miniRocket = game.add.sprite(0, 0, 'miniRocket');
-		miniRocket.anchor.set(0.5);
-		miniRocket.scale.set(0.18);
-		miniRocket.alpha = 0;
-		orbitGroup.add(miniRocket);
-
-		game.add.tween(miniRocket).to(
-			{ alpha: 1 },
-			600,
-			Phaser.Easing.Linear.None,
-			true,
-			700
-		);
-
-		// animation type "orbite"
-		var orbitState = { angle: 0 };
-		orbitRocketTween = game.add.tween(orbitState).to(
-			{ angle: 360 },
-			6000,
-			Phaser.Easing.Linear.None,
-			true,
-			0,
-			-1
-		);
-
-		orbitRocketTween.onUpdateCallback(function () {
-			var a = Phaser.Math.degToRad(orbitState.angle);
-
-			var rx = 190;
-			var ry = 60;
-
-			miniRocket.x = Math.cos(a) * rx;
-			miniRocket.y = Math.sin(a) * ry;
-
-			// orientation tangente
-			miniRocket.rotation = a + Math.PI / 2;
-		}, this);
-
-		// petit pulse du logo
-		game.add.tween(logo.scale).to(
-			{ x: 1.03, y: 1.03 },
-			1200,
-			Phaser.Easing.Sinusoidal.InOut,
-			true,
-			1000,
-			-1,
-			true
-		);
-
-		// slogan
-		var slogan = game.add.text(
-			centerX,
-			game.world.centerY + 95,
-			'Solve • Fly • Survive',
-			{
-				font: '24px Arial',
-				fill: '#FFFFFF'
-			}
-		);
-		slogan.anchor.set(0.5);
-		slogan.alpha = 0;
-
-		game.add.tween(slogan).to(
-			{ alpha: 1 },
-			700,
-			Phaser.Easing.Linear.None,
-			true,
-			900
-		);
-
 		return {
-			logo: logo,
-			orbitGroup: orbitGroup,
-			miniRocket: miniRocket,
-			slogan: slogan
+			logo: logo
 		};
 	}
 
 	function destroyAnimatedLogo() {
-		if (orbitRocketTween) {
-			orbitRocketTween.stop();
-			orbitRocketTween = null;
-		}
-
 		if (animatedLogo) {
 			if (animatedLogo.logo) animatedLogo.logo.destroy();
-			if (animatedLogo.orbitGroup) animatedLogo.orbitGroup.destroy();
-			if (animatedLogo.slogan) animatedLogo.slogan.destroy();
 			animatedLogo = null;
 		}
 	}
