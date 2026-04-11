@@ -128,6 +128,9 @@
 	var howToPlayText;
 	var homeMenuButton;
 
+	var animatedLogo;
+	var orbitRocketTween;
+
 	textStyle = { font: 'bold 18px Arial', fill: '#F39C12' };
 	textStyle1 = { font: 'bold 30px Arial', fill: '#8A2B56' };
 	var numberStyle= { font: 'bold 15px Arial', fill: '#F0F3F4' };
@@ -203,6 +206,9 @@
 		game.load.spritesheet('floss', 'medias/img/image/floss1.png', 184.75, 297, 10);
 
 		game.load.bitmapFont('numbersFont', 'medias/fonts/numbers.png', 'medias/fonts/numbers.xml');
+
+		game.load.image('logo', 'medias/logos/mathCosmos-logo.jpeg');
+		game.load.image('miniRocket', 'medias/img/image/rocket.png');
 
 	}
 	function create() {
@@ -483,19 +489,8 @@
 		startButton.visible = false;
 		startButton1.visible = false;
 
-		titleText = game.add.text(game.world.centerX, 55, 'SPACEMATH', {
-			font: 'bold 34px Arial',
-			fill: '#FFFFFF',
-			stroke: '#000000',
-			strokeThickness: 4
-		});
-		titleText.anchor.set(0.5);
-
-		subtitleText = game.add.text(game.world.centerX, 95, 'Space Mission Math Game', {
-			font: '18px Arial',
-			fill: '#F1C40F'
-		});
-		subtitleText.anchor.set(0.5);
+		destroyAnimatedLogo();
+		animatedLogo = showAnimatedLogo();
 
 		howToPlayText = game.add.text(game.world.centerX, 140,
     	'Compute the coordinates\nFly to the correct planet\nAvoid asteroids',
@@ -516,6 +511,8 @@
 	}
 
 	function openModeSelection() {
+		destroyAnimatedLogo();
+
 		if (titleText) titleText.destroy();
 		if (subtitleText) subtitleText.destroy();
 		if (howToPlayText) howToPlayText.destroy();
@@ -1562,6 +1559,142 @@
 		game.physics.enable(txt, Phaser.Physics.ARCADE);
 		txt.body.immovable = true;
 		return txt;
+	}
+
+	function showAnimatedLogo() {
+		var centerX = game.world.centerX;
+		var centerY = game.world.centerY - 40;
+
+		// logo
+		var logo = game.add.sprite(centerX, centerY, 'logo');
+		logo.anchor.set(0.5);
+		logo.alpha = 0;
+		logo.scale.set(0.6);
+
+		game.add.tween(logo).to(
+			{ alpha: 1 },
+			700,
+			Phaser.Easing.Linear.None,
+			true
+		);
+
+		game.add.tween(logo.scale).to(
+			{ x: 1, y: 1 },
+			900,
+			Phaser.Easing.Back.Out,
+			true
+		);
+
+		// groupe orbite
+		var orbitGroup = game.add.group();
+		orbitGroup.x = centerX;
+		orbitGroup.y = centerY;
+		orbitGroup.alpha = 0;
+
+		var orbit = game.add.graphics(0, 0);
+		orbit.lineStyle(4, 0x4FC3F7, 0.9);
+		orbit.drawEllipse(0, 0, 380, 120);
+		orbitGroup.add(orbit);
+
+		game.add.tween(orbitGroup).to(
+			{ alpha: 1 },
+			700,
+			Phaser.Easing.Linear.None,
+			true,
+			300
+		);
+
+		// petite fusée en orbite
+		var miniRocket = game.add.sprite(0, 0, 'miniRocket');
+		miniRocket.anchor.set(0.5);
+		miniRocket.scale.set(0.18);
+		miniRocket.alpha = 0;
+		orbitGroup.add(miniRocket);
+
+		game.add.tween(miniRocket).to(
+			{ alpha: 1 },
+			600,
+			Phaser.Easing.Linear.None,
+			true,
+			700
+		);
+
+		// animation type "orbite"
+		var orbitState = { angle: 0 };
+		orbitRocketTween = game.add.tween(orbitState).to(
+			{ angle: 360 },
+			6000,
+			Phaser.Easing.Linear.None,
+			true,
+			0,
+			-1
+		);
+
+		orbitRocketTween.onUpdateCallback(function () {
+			var a = Phaser.Math.degToRad(orbitState.angle);
+
+			var rx = 190;
+			var ry = 60;
+
+			miniRocket.x = Math.cos(a) * rx;
+			miniRocket.y = Math.sin(a) * ry;
+
+			// orientation tangente
+			miniRocket.rotation = a + Math.PI / 2;
+		}, this);
+
+		// petit pulse du logo
+		game.add.tween(logo.scale).to(
+			{ x: 1.03, y: 1.03 },
+			1200,
+			Phaser.Easing.Sinusoidal.InOut,
+			true,
+			1000,
+			-1,
+			true
+		);
+
+		// slogan
+		var slogan = game.add.text(
+			centerX,
+			game.world.centerY + 95,
+			'Solve • Fly • Survive',
+			{
+				font: '24px Arial',
+				fill: '#FFFFFF'
+			}
+		);
+		slogan.anchor.set(0.5);
+		slogan.alpha = 0;
+
+		game.add.tween(slogan).to(
+			{ alpha: 1 },
+			700,
+			Phaser.Easing.Linear.None,
+			true,
+			900
+		);
+
+		return {
+			logo: logo,
+			orbitGroup: orbitGroup,
+			miniRocket: miniRocket,
+			slogan: slogan
+		};
+	}
+
+	function destroyAnimatedLogo() {
+		if (orbitRocketTween) {
+			orbitRocketTween.stop();
+			orbitRocketTween = null;
+		}
+
+		if (animatedLogo) {
+			if (animatedLogo.logo) animatedLogo.logo.destroy();
+			if (animatedLogo.orbitGroup) animatedLogo.orbitGroup.destroy();
+			if (animatedLogo.slogan) animatedLogo.slogan.destroy();
+			animatedLogo = null;
+		}
 	}
 
 </script>
