@@ -138,38 +138,70 @@
 			line1: 'Compute the coordinates',
 			line2: 'Fly to the correct planet',
 			line3: 'Avoid asteroids',
-			missionComplete: 'MISSION COMPLETE',
-			gameOver: 'GAME OVER',
-			slogan: 'Solve • Fly • Survive',
-			play: 'Play',
+
+			missionTitle: 'MISSION BRIEFING',
+			missionLine1: "You're an astronaut on a mission",
+			missionLine2: 'Compute the planet coordinates',
+			missionLine3: 'Reach the correct planet',
+			missionLine4: 'Avoid asteroids',
+			missionLine5: 'Launch in 3... 2... 1...',
+
+			win: 'MISSION COMPLETE',
+			lose: 'GAME OVER',
+
+			score: 'Score',
 			time: 'Time',
-			score: 'Score'
+
+			slogan: 'Solve • Fly • Survive'
 		},
 
 		fr: {
 			line1: 'Calcule les coordonnées',
 			line2: 'Atteins la bonne planète',
 			line3: 'Évite les astéroïdes',
-			missionComplete: 'MISSION ACCOMPLIE',
-			gameOver: 'PARTIE TERMINÉE',
-			slogan: 'Résous • Vole • Survis',
-			play: 'Jouer',
+
+			missionTitle: 'BRIEFING DE MISSION',
+			missionLine1: 'Tu es un astronaute en mission',
+			missionLine2: 'Calcule les coordonnées de la planète',
+			missionLine3: 'Atteins la bonne planète',
+			missionLine4: 'Évite les astéroïdes',
+			missionLine5: 'Lancement dans 3... 2... 1...',
+
+			win: 'MISSION ACCOMPLIE',
+			lose: 'PARTIE TERMINÉE',
+
+			score: 'Score',
 			time: 'Temps',
-			score: 'Score'
+
+			slogan: 'Résous • Vole • Survis'
 		},
 
 		nl: {
 			line1: 'Bereken de coördinaten',
 			line2: 'Vlieg naar de juiste planeet',
 			line3: 'Vermijd asteroïden',
-			missionComplete: 'MISSIE VOLTOOID',
-			gameOver: 'GAME OVER',
-			slogan: 'Los op • Vlieg • Overleef',
-			play: 'Spelen',
+
+			missionTitle: 'MISSIEBRIEFING',
+			missionLine1: 'Je bent een astronaut op missie',
+			missionLine2: 'Bereken de planeetcoördinaten',
+			missionLine3: 'Bereik de juiste planeet',
+			missionLine4: 'Vermijd asteroïden',
+			missionLine5: 'Lancering in 3... 2... 1...',
+
+			win: 'MISSIE VOLTOOID',
+			lose: 'GAME OVER',
+
+			score: 'Score',
 			time: 'Tijd',
-			score: 'Score'
+
+			slogan: 'Los op • Vlieg • Overleef'
 		}
 	};
+
+
+	var btnEN;
+	var btnFR;
+	var btnNL;
 
 	textStyle = { font: 'bold 18px Arial', fill: '#F39C12' };
 	textStyle1 = { font: 'bold 30px Arial', fill: '#8A2B56' };
@@ -558,6 +590,10 @@
 		playMenuButton.scale.set(0.55);
 
 		copyText.visible = true;
+
+		if (btnEN) btnEN.destroy();
+		if (btnFR) btnFR.destroy();
+		if (btnNL) btnNL.destroy();
 
 		var btnEN = game.add.bitmapText(20, 20, 'mainFont', 'EN', 20);
 		btnEN.inputEnabled = true;
@@ -1155,7 +1191,7 @@
 		planet7.visible = false;
 		planet8.visible = false;
 
-		var winTitle = game.add.text(game.world.centerX, 20, 'MISSION COMPLETE', {
+		var winTitle = game.add.text(game.world.centerX, 20, t('win'), {
 			font: 'bold 28px Arial',
 			fill: '#2ECC71',
 			stroke: '#000000',
@@ -1163,10 +1199,10 @@
 		});
 		winTitle.anchor.set(0.5);
 
-		var winScore = game.add.text(500, game.world.height-50, 'Score: ' + score, textStyle1);
+		var winScore = game.add.text(500, game.world.height-50, t('score') + ': ' + score, textStyle1);
         winScore.anchor.set(0.5);
 
-        var winTime = game.add.text(100, game.world.height-50, 'Time: ' + formatTime(Time), textStyle1);
+        var winTime = game.add.text(100, game.world.height-50, t('time') + ': ' + formatTime(Time), textStyle1);
         winTime.anchor.set(0.5);
 
 		var floss = game.add.sprite(game.world.centerX, 190, 'floss');
@@ -1211,7 +1247,7 @@
 		planet7.visible = false;
 		planet8.visible = false;
 
-		var loseTitle = game.add.text(game.world.centerX, 60, 'GAME OVER', {
+		var loseTitle = game.add.text(game.world.centerX, 60, t('lose'), {
 			font: 'bold 34px Arial',
 			fill: '#E74C3C',
 			stroke: '#000000',
@@ -1219,10 +1255,10 @@
 		});
 		loseTitle.anchor.set(0.5);
 
-		var loseScore = game.add.text(500, game.world.height-50, 'Score: ' + score, textStyle1);
+		var loseScore = game.add.text(500, game.world.height-50, t('score') + ': ' + score, textStyle1);
         loseScore.anchor.set(0.5);
 
-        var loseTime = game.add.text(100, game.world.height-50, 'Time: ' + formatTime(Time), textStyle1);
+        var loseTime = game.add.text(100, game.world.height-50, t('time') + ': ' + formatTime(Time), textStyle1);
         loseTime.anchor.set(0.5);
 
 		var replayBtn = game.add.button(100, 60, 'lostButton', restartGame, this);
@@ -1555,12 +1591,12 @@
 		divButton.visible = false;
 
 		var messages = [
-			"MISSION BRIEFING",
-			"You're an astronaut on a mission",
-			"Compute the planet coordinates",
-			"Reach the correct planet",
-			"Avoid asteroids",
-			"Launch in 3... 2... 1..."
+			t('missionTitle'),
+			t('missionLine1'),
+			t('missionLine2'),
+			t('missionLine3'),
+			t('missionLine4'),
+			t('missionLine5')
 		];
 
 		var texts = [];
