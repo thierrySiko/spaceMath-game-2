@@ -1720,9 +1720,9 @@
 	}
 
 	function hideLanguageButtons() {
-		btnEN.destroy();
-		btnFR.destroy();
-		btnNL.destroy();
+		if(btnEN) btnEN.destroy();
+		if(btnFR) btnFR.destroy();
+		if(btnNL) btnNL.destroy();
 	}
 
 	function showLanguageButtons() {
