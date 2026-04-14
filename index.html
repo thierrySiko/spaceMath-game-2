@@ -494,12 +494,23 @@
 		destroyAnimatedLogo();
 		animatedLogo = showAnimatedLogo();
 
-		howToPlayText = createUiBitmapText(
+		howToPlayText = game.add.text(
 			game.world.centerX,
-			145,
+			150,
 			'Compute the coordinates\nFly to the correct planet\nAvoid asteroids',
-			24
+			{
+				font: '24px Arial',
+				fill: '#FFFFFF',
+				stroke: '#000000',
+				strokeThickness: 4,
+				align: 'center'
+			}
 		);
+
+		howToPlayText.anchor.set(0.5);
+		howToPlayText.alpha = 0.9;
+		howToPlayText.lineSpacing = 10;
+		howToPlayText.setShadow(2, 2, 'rgba(0,0,0,0.7)', 2);
 
 		playMenuButton = game.add.button(game.world.centerX, 235, 'startButton', openModeSelection, this);
 		playMenuButton.anchor.set(0.5);
