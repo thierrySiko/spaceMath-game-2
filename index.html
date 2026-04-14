@@ -210,6 +210,8 @@
 		game.load.image('logo', 'medias/logos/logo2.png');
 		game.load.image('miniRocket', 'medias/img/image/rocket.png');
 
+		game.load.bitmapFont('mainFont', 'medias/fonts/main.png','medias/fonts/main.xml');
+
 	}
 	function create() {
 		backgroundAudio = game.add.audio('backgroundAudio');
@@ -492,15 +494,12 @@
 		destroyAnimatedLogo();
 		animatedLogo = showAnimatedLogo();
 
-		howToPlayText = game.add.text(game.world.centerX, 140,
-    	'Compute the coordinates\nFly to the correct planet\nAvoid asteroids',
-			{
-				font: '16px Arial',
-				fill: '#FFFFFF',
-				align: 'center'
-			}
+		howToPlayText = createUiBitmapText(
+			game.world.centerX,
+			145,
+			'Compute the coordinates\nFly to the correct planet\nAvoid asteroids',
+			24
 		);
-		howToPlayText.anchor.set(0.5);
 
 		playMenuButton = game.add.button(game.world.centerX, 235, 'startButton', openModeSelection, this);
 		playMenuButton.anchor.set(0.5);
@@ -1536,6 +1535,15 @@
 				style
 			);
 
+			var size = index === 0 ? 28 : 22;
+			var txt = game.add.bitmapText(
+				game.world.centerX,
+				startY + index * 40,
+				'mainFont',
+				messages[index],
+				size
+			);
+
 			txt.anchor.set(0.5);
 			txt.alpha = 0;
 
@@ -1595,6 +1603,12 @@
 			if (animatedLogo.logo) animatedLogo.logo.destroy();
 			animatedLogo = null;
 		}
+	}
+
+	function createUiBitmapText(x, y, content, size) {
+		var txt = game.add.bitmapText(x, y, 'mainFont', content, size || 28);
+		txt.anchor.set(0.5);
+		return txt;
 	}
 
 </script>
