@@ -595,19 +595,19 @@
 		if (btnFR) btnFR.destroy();
 		if (btnNL) btnNL.destroy();
 
-		var btnEN = game.add.bitmapText(20, 20, 'mainFont', 'EN', 20);
+		btnEN = game.add.bitmapText(20, 20, 'mainFont', 'EN', 20);
 		btnEN.inputEnabled = true;
 		btnEN.events.onInputDown.add(function() {
 			setLanguage('en');
 		});
 
-		var btnFR = game.add.bitmapText(60, 20, 'mainFont', 'FR', 20);
+		btnFR = game.add.bitmapText(60, 20, 'mainFont', 'FR', 20);
 		btnFR.inputEnabled = true;
 		btnFR.events.onInputDown.add(function() {
 			setLanguage('fr');
 		});
 
-		var btnNL = game.add.bitmapText(100, 20, 'mainFont', 'NL', 20);
+		btnNL = game.add.bitmapText(100, 20, 'mainFont', 'NL', 20);
 		btnNL.inputEnabled = true;
 		btnNL.events.onInputDown.add(function() {
 			setLanguage('nl');
