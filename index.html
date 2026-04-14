@@ -624,6 +624,8 @@
 		if (howToPlayText) howToPlayText.destroy();
 		if (playMenuButton) playMenuButton.destroy();
 
+		hideLanguageButtons();
+
 		copyText.visible = false;
 		rocket.visible = true;
 		asteroid1.visible = true;
@@ -1715,6 +1717,18 @@
 	function setLanguage(lang) {
 		localStorage.setItem('lang', lang);
 		location.reload();
+	}
+
+	function hideLanguageButtons() {
+		if (btnEN) btnEN.visible = false;
+		if (btnFR) btnFR.visible = false;
+		if (btnNL) btnNL.visible = false;
+	}
+
+	function showLanguageButtons() {
+		if (btnEN) btnEN.visible = true;
+		if (btnFR) btnFR.visible = true;
+		if (btnNL) btnNL.visible = true;
 	}
 
 </script>
