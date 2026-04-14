@@ -131,9 +131,50 @@
 	var animatedLogo;
 	var orbitRocketTween;
 
+	var currentLanguage = localStorage.getItem('lang') || 'en';
+
+	var translations = {
+		en: {
+			line1: 'Compute the coordinates',
+			line2: 'Fly to the correct planet',
+			line3: 'Avoid asteroids',
+			missionComplete: 'MISSION COMPLETE',
+			gameOver: 'GAME OVER',
+			slogan: 'Solve • Fly • Survive',
+			play: 'Play',
+			time: 'Time',
+			score: 'Score'
+		},
+
+		fr: {
+			line1: 'Calcule les coordonnées',
+			line2: 'Atteins la bonne planète',
+			line3: 'Évite les astéroïdes',
+			missionComplete: 'MISSION ACCOMPLIE',
+			gameOver: 'PARTIE TERMINÉE',
+			slogan: 'Résous • Vole • Survis',
+			play: 'Jouer',
+			time: 'Temps',
+			score: 'Score'
+		},
+
+		nl: {
+			line1: 'Bereken de coördinaten',
+			line2: 'Vlieg naar de juiste planeet',
+			line3: 'Vermijd asteroïden',
+			missionComplete: 'MISSIE VOLTOOID',
+			gameOver: 'GAME OVER',
+			slogan: 'Los op • Vlieg • Overleef',
+			play: 'Spelen',
+			time: 'Tijd',
+			score: 'Score'
+		}
+	};
+
 	textStyle = { font: 'bold 18px Arial', fill: '#F39C12' };
 	textStyle1 = { font: 'bold 30px Arial', fill: '#8A2B56' };
 	var numberStyle= { font: 'bold 15px Arial', fill: '#F0F3F4' };
+
 	function preload() {
 		game.load.audio('backgroundAudio', 'start1.mp3');
 		game.load.audio('startAudio', 'start.wav');
@@ -497,7 +538,7 @@
 		howToPlayText = game.add.text(
 			game.world.centerX,
 			150,
-			'Compute the coordinates\nFly to the correct planet\nAvoid asteroids',
+			t('line1') + '\n' + t('line2') + '\n' + t('line3'),
 			{
 				font: '24px Arial',
 				fill: '#FFFFFF',
@@ -517,6 +558,24 @@
 		playMenuButton.scale.set(0.55);
 
 		copyText.visible = true;
+
+		var btnEN = game.add.text(20, 20, 'EN', { font: '20px Arial', fill: '#fff' });
+		btnEN.inputEnabled = true;
+		btnEN.events.onInputDown.add(function() {
+			setLanguage('en');
+		});
+
+		var btnFR = game.add.text(60, 20, 'FR', { font: '20px Arial', fill: '#fff' });
+		btnFR.inputEnabled = true;
+		btnFR.events.onInputDown.add(function() {
+			setLanguage('fr');
+		});
+
+		var btnNL = game.add.text(100, 20, 'NL', { font: '20px Arial', fill: '#fff' });
+		btnNL.inputEnabled = true;
+		btnNL.events.onInputDown.add(function() {
+			setLanguage('nl');
+		});
 
 		updateSoundButtons();
 	}
@@ -1611,6 +1670,15 @@
 		var txt = game.add.bitmapText(x, y, 'mainFont', content, size || 28);
 		txt.anchor.set(0.5);
 		return txt;
+	}
+
+	function t(key) {
+		return translations[currentLanguage][key] || key;
+	}
+
+	function setLanguage(lang) {
+		localStorage.setItem('lang', lang);
+		location.reload();
 	}
 
 </script>
